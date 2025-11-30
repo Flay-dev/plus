@@ -1,0 +1,3774 @@
+<!doctype html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestão Esportiva Premium</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+        
+        .app-container {
+            width: 100%;
+            min-height: 100%;
+            background: #f5f7fa;
+        }
+        
+        /* Premium Badge */
+        .premium-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1a202c;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+        }
+        
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 48px;
+            width: 100%;
+            max-width: 440px;
+            position: relative;
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .login-logo svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+        }
+        
+        .login-logo h1 {
+            font-size: 24px;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+        
+        .login-logo p {
+            font-size: 14px;
+            color: #718096;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 12px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #f7fafc;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1a202c 0%, #2d3748 100%);
+            color: white;
+            padding: 24px 0;
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 0 24px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-header h2 {
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .sidebar-header .premium-label {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1a202c;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        
+        .sidebar-nav {
+            padding: 24px 0;
+        }
+        
+        .nav-item {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #cbd5e0;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(102, 126, 234, 0.2);
+            color: white;
+            border-left: 4px solid #667eea;
+        }
+        
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .nav-item .premium-icon {
+            position: absolute;
+            right: 24px;
+            color: #ffd700;
+            font-size: 16px;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+        
+        .top-bar {
+            background: white;
+            padding: 20px 32px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .top-bar h1 {
+            font-size: 24px;
+            color: #1a202c;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .content-area {
+            padding: 32px;
+        }
+        
+        /* Premium Cards Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+        
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .stat-card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stat-card-icon.blue {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(102, 126, 234, 0.05) 100%);
+            color: #667eea;
+        }
+        
+        .stat-card-icon.green {
+            background: linear-gradient(135deg, rgba(72, 187, 120, 0.2) 0%, rgba(72, 187, 120, 0.05) 100%);
+            color: #48bb78;
+        }
+        
+        .stat-card-icon.purple {
+            background: linear-gradient(135deg, rgba(159, 122, 234, 0.2) 0%, rgba(159, 122, 234, 0.05) 100%);
+            color: #9f7aea;
+        }
+        
+        .stat-card-icon.gold {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.05) 100%);
+            color: #daa520;
+        }
+        
+        .stat-card-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 4px;
+        }
+        
+        .stat-card-label {
+            font-size: 14px;
+            color: #718096;
+        }
+        
+        .stat-card-trend {
+            font-size: 12px;
+            color: #48bb78;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        /* Premium Features */
+        .premium-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .premium-section::before {
+            content: '★';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 200px;
+            opacity: 0.1;
+        }
+        
+        .premium-section h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .premium-section p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+        
+        .premium-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .premium-feature {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .premium-feature svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        
+        /* Map Container */
+        .map-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 32px;
+        }
+        
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .map-header h2 {
+            font-size: 20px;
+            color: #1a202c;
+        }
+        
+        .map-controls {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .map-btn {
+            padding: 10px 16px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .map-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .map-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .map-view {
+            width: 100%;
+            height: 500px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-background {
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(102, 126, 234, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            position: relative;
+        }
+        
+        .map-marker {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .map-marker::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .map-marker:hover {
+            transform: rotate(-45deg) scale(1.2);
+            z-index: 10;
+        }
+        
+        .map-tooltip {
+            position: absolute;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-size: 13px;
+            color: #1a202c;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+            transform: rotate(0deg);
+        }
+        
+        .map-marker:hover + .map-tooltip {
+            opacity: 1;
+        }
+        
+        /* Analytics Section */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .analytics-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .analytics-card h3 {
+            font-size: 16px;
+            color: #1a202c;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .chart-bar {
+            margin-bottom: 16px;
+        }
+        
+        .chart-bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #718096;
+        }
+        
+        .chart-bar-container {
+            width: 100%;
+            height: 12px;
+            background: #f7fafc;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .chart-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 6px;
+            transition: width 0.6s ease;
+        }
+        
+        /* Real-time Updates */
+        .realtime-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 32px;
+        }
+        
+        .realtime-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .realtime-header h2 {
+            font-size: 20px;
+            color: #1a202c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .pulse-indicator {
+            width: 12px;
+            height: 12px;
+            background: #48bb78;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+        }
+        
+        .activity-feed {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            padding: 16px;
+            border-left: 3px solid #e2e8f0;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+        
+        .activity-item:hover {
+            border-left-color: #667eea;
+            background: #f7fafc;
+        }
+        
+        .activity-item.new {
+            border-left-color: #48bb78;
+            background: rgba(72, 187, 120, 0.05);
+        }
+        
+        .activity-time {
+            font-size: 12px;
+            color: #718096;
+            margin-bottom: 4px;
+        }
+        
+        .activity-content {
+            font-size: 14px;
+            color: #2d3748;
+        }
+        
+        /* Advanced Filters */
+        .filter-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+        }
+        
+        .filter-panel h3 {
+            font-size: 16px;
+            color: #1a202c;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #2d3748;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            padding: 10px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        /* Export Section */
+        .export-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 32px;
+        }
+        
+        .export-panel h3 {
+            font-size: 18px;
+            color: #1a202c;
+            margin-bottom: 16px;
+        }
+        
+        .export-options {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .export-btn {
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .export-btn:hover {
+            background: #f7fafc;
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .table-header h2 {
+            font-size: 20px;
+            color: #1a202c;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            padding: 10px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 200px;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn-add {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th {
+            background: #f7fafc;
+            padding: 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .data-table td {
+            padding: 16px;
+            border-top: 1px solid #e2e8f0;
+            color: #2d3748;
+            font-size: 14px;
+        }
+        
+        .data-table tr:hover {
+            background: #f7fafc;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-blue {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+        
+        .badge-green {
+            background: rgba(72, 187, 120, 0.1);
+            color: #48bb78;
+        }
+        
+        .badge-gold {
+            background: rgba(255, 215, 0, 0.2);
+            color: #b8860b;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 32px;
+        }
+        
+        .quick-actions h3 {
+            font-size: 18px;
+            color: #1a202c;
+            margin-bottom: 20px;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .action-btn {
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .main-content {
+                margin-left: 200px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-area {
+                padding: 16px;
+            }
+            
+            .login-card {
+                padding: 32px 24px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .premium-features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .map-view {
+                height: 400px;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .toast.success {
+            border-left: 4px solid #48bb78;
+        }
+        
+        .toast.info {
+            border-left: 4px solid #667eea;
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body><!-- Dashboard Responsável -->
+  <div id="responsavel-dashboard" class="dashboard-container hidden">
+   <aside class="sidebar" style="background: linear-gradient(180deg, #2d3748 0%, #4a5568 100%);">
+    <div class="sidebar-header">
+     <h2>
+      <svg viewbox="0 0 24 24" fill="currentColor" width="24" height="24"><circle cx="12" cy="12" r="10" />
+      </svg> SGE Responsável</h2>
+    </div>
+    <nav class="sidebar-nav">
+     <div class="nav-item active" onclick="showResponsavelScreen('dashboard')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+      </svg> Meu Painel
+     </div>
+     <div class="nav-item" onclick="showResponsavelScreen('meus-alunos')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+      </svg> Meus Alunos
+     </div>
+     <div class="nav-item" onclick="showResponsavelScreen('projetos-disponiveis')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+      </svg> Projetos Disponíveis
+     </div>
+     <div class="nav-item" onclick="showResponsavelScreen('historico')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /> <line x1="16" y1="2" x2="16" y2="6" /> <line x1="8" y1="2" x2="8" y2="6" /> <line x1="3" y1="10" x2="21" y2="10" />
+      </svg> Histórico de Presença
+     </div>
+     <div class="nav-item" onclick="logout()">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" y1="12" x2="9" y2="12" />
+      </svg> Sair
+     </div>
+    </nav>
+   </aside>
+   <main class="main-content">
+    <div class="top-bar">
+     <h1 id="responsavel-screen-title">Meu Painel</h1>
+     <div class="user-menu">
+      <div class="user-avatar" style="background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);">
+       RP
+      </div><span id="responsavel-name">Responsável</span>
+     </div>
+    </div>
+    <div class="content-area" id="responsavel-content"><!-- Conteúdo dinâmico do responsável -->
+    </div>
+   </main>
+  </div><!-- Tela 1: Login -->
+  <div id="login-screen" class="login-screen">
+   <div class="login-card">
+    <div class="premium-badge">
+     ★ PREMIUM
+    </div>
+    <div class="login-logo">
+     <svg viewbox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="30" fill="url(#grad1)" /> <path d="M32 16L40 28H24L32 16Z" fill="white" /> <circle cx="32" cy="40" r="8" fill="white" /> <defs>
+       <lineargradient id="grad1" x1="0" y1="0" x2="64" y2="64">
+        <stop offset="0%" style="stop-color:#667eea" />
+        <stop offset="100%" style="stop-color:#764ba2" />
+       </lineargradient>
+      </defs>
+     </svg>
+     <h1 id="system-name">Sistema de Gestão Esportiva Premium</h1>
+     <p id="welcome-text">Bem-vindo à versão premium</p>
+    </div>
+    <form id="login-form">
+     <div class="form-group"><label for="email">E-mail</label> <input type="email" id="email" placeholder="seu@email.com" required>
+     </div>
+     <div class="form-group"><label for="password">Senha</label> <input type="password" id="password" placeholder="••••••••" required>
+     </div><button type="button" class="btn btn-primary" onclick="loginAdmin()">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /> <path d="M9 12l2 2 4-4" />
+      </svg> Entrar como Administrador </button> <button type="button" class="btn btn-secondary" onclick="loginResponsavel()">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+      </svg> Entrar como Responsável </button>
+    </form>
+   </div>
+  </div><!-- Dashboard Premium Admin -->
+  <div id="admin-dashboard" class="dashboard-container hidden">
+   <aside class="sidebar">
+    <div class="sidebar-header">
+     <h2>
+      <svg viewbox="0 0 24 24" fill="currentColor" width="24" height="24"><circle cx="12" cy="12" r="10" />
+      </svg> SGE <span class="premium-label">PREMIUM</span></h2>
+    </div>
+    <nav class="sidebar-nav">
+     <div class="nav-item active" onclick="showScreen('admin-dashboard')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+      </svg> Dashboard Premium
+     </div>
+     <div class="nav-item" onclick="showScreen('mapa-localizacao')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+      </svg> Mapa de Localização <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('analytics-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+      </svg> Analytics Avançado <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('realtime-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg> Monitoramento em Tempo Real <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('export-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+      </svg> Exportar Relatórios <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('autorizacoes-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /> <path d="M9 12l2 2 4-4" />
+      </svg> Autorizar Responsáveis <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('projetos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+      </svg> Projetos
+     </div>
+     <div class="nav-item" onclick="showScreen('responsaveis-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg> Responsáveis
+     </div>
+     <div class="nav-item" onclick="showScreen('alunos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+      </svg> Alunos
+     </div>
+    </nav>
+   </aside>
+   <main class="main-content">
+    <div class="top-bar">
+     <h1>Dashboard Premium</h1>
+     <div class="user-menu">
+      <div class="user-avatar">
+       AD
+      </div><span>Admin Premium</span>
+     </div>
+    </div>
+    <div class="content-area"><!-- Premium Banner -->
+     <div class="premium-section">
+      <h2>
+       <svg viewbox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+       </svg> Recursos Premium Exclusivos</h2>
+      <p>Acesso completo a todas as funcionalidades avançadas do sistema</p>
+      <div class="premium-features-grid">
+       <div class="premium-feature">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+        </svg><span>Mapa Interativo</span>
+       </div>
+       <div class="premium-feature">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+        </svg><span>Analytics Avançado</span>
+       </div>
+       <div class="premium-feature">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+        </svg><span>Tempo Real</span>
+       </div>
+       <div class="premium-feature">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+        </svg><span>Exportação PDF/Excel</span>
+       </div>
+      </div>
+     </div><!-- Stats Grid -->
+     <div class="stats-grid">
+      <div class="stat-card">
+       <div class="stat-card-header">
+        <div>
+         <div class="stat-card-value">
+          12
+         </div>
+         <div class="stat-card-label">
+          Projetos Ativos
+         </div>
+         <div class="stat-card-trend">
+          ↑ +3 este mês
+         </div>
+        </div>
+        <div class="stat-card-icon blue">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+         </svg>
+        </div>
+       </div>
+      </div>
+      <div class="stat-card">
+       <div class="stat-card-header">
+        <div>
+         <div class="stat-card-value">
+          247
+         </div>
+         <div class="stat-card-label">
+          Alunos Cadastrados
+         </div>
+         <div class="stat-card-trend">
+          ↑ +18 este mês
+         </div>
+        </div>
+        <div class="stat-card-icon green">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+         </svg>
+        </div>
+       </div>
+      </div>
+      <div class="stat-card">
+       <div class="stat-card-header">
+        <div>
+         <div class="stat-card-value">
+          18
+         </div>
+         <div class="stat-card-label">
+          Responsáveis
+         </div>
+         <div class="stat-card-trend">
+          ↑ +2 este mês
+         </div>
+        </div>
+        <div class="stat-card-icon purple">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+         </svg>
+        </div>
+       </div>
+      </div>
+      <div class="stat-card">
+       <div class="stat-card-header">
+        <div>
+         <div class="stat-card-value">
+          94%
+         </div>
+         <div class="stat-card-label">
+          Taxa de Presença
+         </div>
+         <div class="stat-card-trend">
+          ↑ +5% este mês
+         </div>
+        </div>
+        <div class="stat-card-icon gold">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+         </svg>
+        </div>
+       </div>
+      </div>
+     </div><!-- Quick Actions -->
+     <div class="quick-actions">
+      <h3>Ações Rápidas Premium</h3>
+      <div class="action-buttons"><button class="action-btn" onclick="showScreen('mapa-localizacao')">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+        </svg> Ver Mapa </button> <button class="action-btn" onclick="showScreen('analytics-screen')">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+        </svg> Analytics </button> <button class="action-btn" onclick="showScreen('realtime-screen')">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+        </svg> Tempo Real </button> <button class="action-btn" onclick="showScreen('export-screen')">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+        </svg> Exportar </button>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div><!-- Tela: Mapa de Localização -->
+  <div id="mapa-localizacao" class="dashboard-container hidden">
+   <aside class="sidebar">
+    <div class="sidebar-header">
+     <h2>
+      <svg viewbox="0 0 24 24" fill="currentColor" width="24" height="24"><circle cx="12" cy="12" r="10" />
+      </svg> SGE <span class="premium-label">PREMIUM</span></h2>
+    </div>
+    <nav class="sidebar-nav">
+     <div class="nav-item" onclick="showScreen('admin-dashboard')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+      </svg> Dashboard Premium
+     </div>
+     <div class="nav-item active" onclick="showScreen('mapa-localizacao')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+      </svg> Mapa de Localização <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('analytics-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+      </svg> Analytics Avançado <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('realtime-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg> Monitoramento em Tempo Real <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('export-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+      </svg> Exportar Relatórios <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('autorizacoes-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /> <path d="M9 12l2 2 4-4" />
+      </svg> Autorizar Responsáveis <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('projetos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+      </svg> Projetos
+     </div>
+     <div class="nav-item" onclick="showScreen('responsaveis-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg> Responsáveis
+     </div>
+     <div class="nav-item" onclick="showScreen('alunos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+      </svg> Alunos
+     </div>
+    </nav>
+   </aside>
+   <main class="main-content">
+    <div class="top-bar">
+     <h1>Mapa de Localização - Recurso Premium ★</h1>
+     <div class="user-menu">
+      <div class="user-avatar">
+       AD
+      </div><span>Admin Premium</span>
+     </div>
+    </div>
+    <div class="content-area"><!-- Filter Panel -->
+     <div class="filter-panel">
+      <h3>
+       <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+       </svg> Filtros Avançados</h3>
+      <div class="filter-grid">
+       <div class="filter-group"><label>Tipo de Local</label> <select id="filter-tipo"> <option value="todos">Todos</option> <option value="projetos">Projetos</option> <option value="alunos">Alunos</option> <option value="responsaveis">Responsáveis</option> </select>
+       </div>
+       <div class="filter-group"><label>Modalidade</label> <select id="filter-modalidade"> <option value="todas">Todas</option> <option value="futebol">Futebol</option> <option value="basquete">Basquete</option> <option value="volei">Vôlei</option> </select>
+       </div>
+       <div class="filter-group"><label>Região</label> <select id="filter-regiao"> <option value="todas">Todas</option> <option value="centro">Centro</option> <option value="norte">Zona Norte</option> <option value="sul">Zona Sul</option> <option value="leste">Zona Leste</option> <option value="oeste">Zona Oeste</option> </select>
+       </div>
+       <div class="filter-group"><label>Buscar Endere��o</label> <input type="text" id="search-endereco" placeholder="Digite um endereço...">
+       </div>
+      </div>
+     </div><!-- Map Container -->
+     <div class="map-container">
+      <div class="map-header">
+       <h2>Visualização Geográfica</h2>
+       <div class="map-controls"><button class="map-btn active" onclick="setMapView('projetos')">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+         </svg> Projetos </button> <button class="map-btn" onclick="setMapView('alunos')">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+         </svg> Alunos </button> <button class="map-btn" onclick="setMapView('heatmap')">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+         </svg> Mapa de Calor </button>
+       </div>
+      </div>
+      <div class="map-view" id="map-view">
+       <div class="map-background"><!-- Projeto 1: Futebol Base -->
+        <div class="map-marker" style="top: 25%; left: 35%; background: #667eea;" onmouseenter="showTooltip(event, 'Futebol Base Iniciante', 'Quadra Municipal - Centro', '32 alunos')" onmouseleave="hideTooltip(event)">
+        </div>
+        <div class="map-tooltip" style="top: 20%; left: 38%;"><strong>Futebol Base Iniciante</strong><br>
+          Quadra Municipal - Centro<br>
+          32 alunos ativos
+        </div><!-- Projeto 2: Basquete -->
+        <div class="map-marker" style="top: 45%; left: 60%; background: #48bb78;" onmouseenter="showTooltip(event, 'Basquete Avançado', 'Ginásio Poliesportivo', '28 alunos')" onmouseleave="hideTooltip(event)">
+        </div>
+        <div class="map-tooltip" style="top: 40%; left: 63%;"><strong>Basquete Avançado</strong><br>
+          Ginásio Poliesportivo<br>
+          28 alunos ativos
+        </div><!-- Projeto 3: Vôlei -->
+        <div class="map-marker" style="top: 65%; left: 25%; background: #9f7aea;" onmouseenter="showTooltip(event, 'Vôlei Juvenil', 'Escola Municipal', '27 alunos')" onmouseleave="hideTooltip(event)">
+        </div>
+        <div class="map-tooltip" style="top: 60%; left: 28%;"><strong>Vôlei Juvenil</strong><br>
+          Escola Municipal<br>
+          27 alunos ativos
+        </div><!-- Projeto 4: Natação -->
+        <div class="map-marker" style="top: 30%; left: 70%; background: #667eea;" onmouseenter="showTooltip(event, 'Natação Infantil', 'Clube Aquático', '35 alunos')" onmouseleave="hideTooltip(event)">
+        </div>
+        <div class="map-tooltip" style="top: 25%; left: 73%;"><strong>Natação Infantil</strong><br>
+          Clube Aquático<br>
+          35 alunos ativos
+        </div><!-- Projeto 5: Handbol -->
+        <div class="map-marker" style="top: 75%; left: 55%; background: #48bb78;" onmouseenter="showTooltip(event, 'Handbol', 'Quadra Coberta', '22 alunos')" onmouseleave="hideTooltip(event)">
+        </div>
+        <div class="map-tooltip" style="top: 70%; left: 58%;"><strong>Handbol</strong><br>
+          Quadra Coberta<br>
+          22 alunos ativos
+        </div><!-- Alunos dispersos (pontos menores) -->
+        <div class="map-marker" style="top: 15%; left: 50%; width: 24px; height: 24px; background: rgba(102, 126, 234, 0.6);" onmouseenter="showTooltip(event, 'Concentração de Alunos', 'Bairro Jardim', '18 alunos')" onmouseleave="hideTooltip(event)">
+        </div>
+        <div class="map-tooltip" style="top: 10%; left: 53%;"><strong>Concentração de Alunos</strong><br>
+          Bairro Jardim<br>
+          18 alunos residentes
+        </div>
+        <div class="map-marker" style="top: 55%; left: 40%; width: 24px; height: 24px; background: rgba(72, 187, 120, 0.6);" onmouseenter="showTooltip(event, 'Concentração de Alunos', 'Vila Nova', '25 alunos')" onmouseleave="hideTooltip(event)">
+        </div>
+        <div class="map-tooltip" style="top: 50%; left: 43%;"><strong>Concentração de Alunos</strong><br>
+          Vila Nova<br>
+          25 alunos residentes
+        </div>
+       </div>
+      </div>
+     </div><!-- Location Stats -->
+     <div class="stats-grid">
+      <div class="stat-card">
+       <div class="stat-card-header">
+        <div>
+         <div class="stat-card-value">
+          8
+         </div>
+         <div class="stat-card-label">
+          Locais Mapeados
+         </div>
+        </div>
+        <div class="stat-card-icon blue">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+         </svg>
+        </div>
+       </div>
+      </div>
+      <div class="stat-card">
+       <div class="stat-card-header">
+        <div>
+         <div class="stat-card-value">
+          15 km
+         </div>
+         <div class="stat-card-label">
+          Raio de Cobertura
+         </div>
+        </div>
+        <div class="stat-card-icon green">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10" /> <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+         </svg>
+        </div>
+       </div>
+      </div>
+      <div class="stat-card">
+       <div class="stat-card-header">
+        <div>
+         <div class="stat-card-value">
+          12
+         </div>
+         <div class="stat-card-label">
+          Bairros Atendidos
+         </div>
+        </div>
+        <div class="stat-card-icon purple">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+         </svg>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div><!-- Tela: Analytics Avançado -->
+  <div id="analytics-screen" class="dashboard-container hidden">
+   <aside class="sidebar">
+    <div class="sidebar-header">
+     <h2>
+      <svg viewbox="0 0 24 24" fill="currentColor" width="24" height="24"><circle cx="12" cy="12" r="10" />
+      </svg> SGE <span class="premium-label">PREMIUM</span></h2>
+    </div>
+    <nav class="sidebar-nav">
+     <div class="nav-item" onclick="showScreen('admin-dashboard')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+      </svg> Dashboard Premium
+     </div>
+     <div class="nav-item" onclick="showScreen('mapa-localizacao')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+      </svg> Mapa de Localização <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item active" onclick="showScreen('analytics-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+      </svg> Analytics Avançado <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('realtime-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg> Monitoramento em Tempo Real <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('export-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+      </svg> Exportar Relatórios <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('autorizacoes-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /> <path d="M9 12l2 2 4-4" />
+      </svg> Autorizar Responsáveis <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('projetos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+      </svg> Projetos
+     </div>
+     <div class="nav-item" onclick="showScreen('responsaveis-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg> Responsáveis
+     </div>
+     <div class="nav-item" onclick="showScreen('alunos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+      </svg> Alunos
+     </div>
+    </nav>
+   </aside>
+   <main class="main-content">
+    <div class="top-bar">
+     <h1>Analytics Avançado - Recurso Premium ★</h1>
+     <div class="user-menu">
+      <div class="user-avatar">
+       AD
+      </div><span>Admin Premium</span>
+     </div>
+    </div>
+    <div class="content-area">
+     <div class="analytics-grid"><!-- Desempenho por Modalidade -->
+      <div class="analytics-card">
+       <h3>
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10" />
+        </svg> Alunos por Modalidade</h3>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Futebol</span> <span>92 alunos</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 92%"></div>
+        </div>
+       </div>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Basquete</span> <span>68 alunos</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 68%"></div>
+        </div>
+       </div>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Vôlei</span> <span>54 alunos</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 54%"></div>
+        </div>
+       </div>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Natação</span> <span>33 alunos</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 33%"></div>
+        </div>
+       </div>
+      </div><!-- Taxa de Presença -->
+      <div class="analytics-card">
+       <h3>
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /> <polyline points="22 4 12 14.01 9 11.01" />
+        </svg> Taxa de Presença por Projeto</h3>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Futebol Base</span> <span>96%</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 96%; background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);"></div>
+        </div>
+       </div>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Basquete Avançado</span> <span>94%</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 94%; background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);"></div>
+        </div>
+       </div>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Vôlei Juvenil</span> <span>91%</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 91%; background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);"></div>
+        </div>
+       </div>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Natação</span> <span>88%</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 88%; background: linear-gradient(90deg, #f6ad55 0%, #ed8936 100%);"></div>
+        </div>
+       </div>
+      </div><!-- Distribuição por Faixa Etária -->
+      <div class="analytics-card">
+       <h3>
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+        </svg> Distribuição por Idade</h3>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>6-10 anos</span> <span>78 alunos</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 78%"></div>
+        </div>
+       </div>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>11-14 anos</span> <span>102 alunos</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 100%"></div>
+        </div>
+       </div>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>15-17 anos</span> <span>67 alunos</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 67%"></div>
+        </div>
+       </div>
+      </div><!-- Crescimento Mensal -->
+      <div class="analytics-card">
+       <h3>
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="12" y1="5" x2="12" y2="19" /> <polyline points="19 12 12 19 5 12" />
+        </svg> Crescimento nos Últimos 6 Meses</h3>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Janeiro</span> <span>+12</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 60%"></div>
+        </div>
+       </div>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Fevereiro</span> <span>+8</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 40%"></div>
+        </div>
+       </div>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Março</span> <span>+15</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 75%"></div>
+        </div>
+       </div>
+       <div class="chart-bar">
+        <div class="chart-bar-label"><span>Abril</span> <span>+18</span>
+        </div>
+        <div class="chart-bar-container">
+         <div class="chart-bar-fill" style="width: 90%"></div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div><!-- Tela: Monitoramento em Tempo Real -->
+  <div id="realtime-screen" class="dashboard-container hidden">
+   <aside class="sidebar">
+    <div class="sidebar-header">
+     <h2>
+      <svg viewbox="0 0 24 24" fill="currentColor" width="24" height="24"><circle cx="12" cy="12" r="10" />
+      </svg> SGE <span class="premium-label">PREMIUM</span></h2>
+    </div>
+    <nav class="sidebar-nav">
+     <div class="nav-item" onclick="showScreen('admin-dashboard')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+      </svg> Dashboard Premium
+     </div>
+     <div class="nav-item" onclick="showScreen('mapa-localizacao')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+      </svg> Mapa de Localização <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('analytics-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+      </svg> Analytics Avançado <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item active" onclick="showScreen('realtime-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg> Monitoramento em Tempo Real <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('export-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+      </svg> Exportar Relatórios <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('autorizacoes-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /> <path d="M9 12l2 2 4-4" />
+      </svg> Autorizar Responsáveis <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('projetos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+      </svg> Projetos
+     </div>
+     <div class="nav-item" onclick="showScreen('responsaveis-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg> Responsáveis
+     </div>
+     <div class="nav-item" onclick="showScreen('alunos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+      </svg> Alunos
+     </div>
+    </nav>
+   </aside>
+   <main class="main-content">
+    <div class="top-bar">
+     <h1>Monitoramento em Tempo Real - Recurso Premium ★</h1>
+     <div class="user-menu">
+      <div class="user-avatar">
+       AD
+      </div><span>Admin Premium</span>
+     </div>
+    </div>
+    <div class="content-area">
+     <div class="realtime-section">
+      <div class="realtime-header">
+       <h2><span class="pulse-indicator"></span> Atividades Recentes</h2><span style="font-size: 13px; color: #718096;">Atualizado agora</span>
+      </div>
+      <div class="activity-feed">
+       <div class="activity-item new">
+        <div class="activity-time">
+         Há 2 minutos
+        </div>
+        <div class="activity-content"><strong>Novo Aluno Cadastrado:</strong> Maria Oliveira foi adicionada ao projeto "Vôlei Juvenil"
+        </div>
+       </div>
+       <div class="activity-item new">
+        <div class="activity-time">
+         Há 8 minutos
+        </div>
+        <div class="activity-content"><strong>Presença Registrada:</strong> 28 alunos confirmaram presença no "Basquete Avançado"
+        </div>
+       </div>
+       <div class="activity-item">
+        <div class="activity-time">
+         Há 15 minutos
+        </div>
+        <div class="activity-content"><strong>Mensagem Enviada:</strong> WhatsApp enviado para todos os alunos do projeto "Futebol Base"
+        </div>
+       </div>
+       <div class="activity-item">
+        <div class="activity-time">
+         Há 22 minutos
+        </div>
+        <div class="activity-content"><strong>Responsável Atualizado:</strong> Carlos Silva atualizou informações de contato
+        </div>
+       </div>
+       <div class="activity-item">
+        <div class="activity-time">
+         Há 35 minutos
+        </div>
+        <div class="activity-content"><strong>Novo Projeto Criado:</strong> "Judô Iniciante" foi adicionado ao sistema
+        </div>
+       </div>
+       <div class="activity-item">
+        <div class="activity-time">
+         Há 1 hora
+        </div>
+        <div class="activity-content"><strong>Relatório Exportado:</strong> Admin exportou relatório mensal de frequência
+        </div>
+       </div>
+       <div class="activity-item">
+        <div class="activity-time">
+         Há 1 hora
+        </div>
+        <div class="activity-content"><strong>Aluno Transferido:</strong> João Silva foi transferido para "Futebol Avançado"
+        </div>
+       </div>
+       <div class="activity-item">
+        <div class="activity-time">
+         Há 2 horas
+        </div>
+        <div class="activity-content"><strong>Horário Alterado:</strong> "Natação Infantil" teve seu horário ajustado para 15h-17h
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="stats-grid">
+      <div class="stat-card">
+       <div class="stat-card-header">
+        <div>
+         <div class="stat-card-value">
+          24
+         </div>
+         <div class="stat-card-label">
+          Atividades na Última Hora
+         </div>
+        </div>
+        <div class="stat-card-icon blue">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+         </svg>
+        </div>
+       </div>
+      </div>
+      <div class="stat-card">
+       <div class="stat-card-header">
+        <div>
+         <div class="stat-card-value">
+          8
+         </div>
+         <div class="stat-card-label">
+          Usuários Online
+         </div>
+        </div>
+        <div class="stat-card-icon green">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+         </svg>
+        </div>
+       </div>
+      </div>
+      <div class="stat-card">
+       <div class="stat-card-header">
+        <div>
+         <div class="stat-card-value">
+          156
+         </div>
+         <div class="stat-card-label">
+          Ações Hoje
+         </div>
+        </div>
+        <div class="stat-card-icon purple">
+         <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10" /> <polyline points="12 6 12 12 16 14" />
+         </svg>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div><!-- Tela: Gerenciar Autorizações -->
+  <div id="autorizacoes-screen" class="dashboard-container hidden">
+   <aside class="sidebar">
+    <div class="sidebar-header">
+     <h2>
+      <svg viewbox="0 0 24 24" fill="currentColor" width="24" height="24"><circle cx="12" cy="12" r="10" />
+      </svg> SGE <span class="premium-label">PREMIUM</span></h2>
+    </div>
+    <nav class="sidebar-nav">
+     <div class="nav-item" onclick="showScreen('admin-dashboard')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+      </svg> Dashboard Premium
+     </div>
+     <div class="nav-item" onclick="showScreen('mapa-localizacao')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+      </svg> Mapa de Localização <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('analytics-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+      </svg> Analytics Avançado <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('realtime-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg> Monitoramento em Tempo Real <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('export-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+      </svg> Exportar Relatórios <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item active" onclick="showScreen('autorizacoes-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /> <path d="M9 12l2 2 4-4" />
+      </svg> Autorizar Responsáveis <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('projetos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+      </svg> Projetos
+     </div>
+     <div class="nav-item" onclick="showScreen('responsaveis-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg> Responsáveis
+     </div>
+     <div class="nav-item" onclick="showScreen('alunos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+      </svg> Alunos
+     </div>
+    </nav>
+   </aside>
+   <main class="main-content">
+    <div class="top-bar">
+     <h1>Gerenciar Autorizações - Recurso Premium ★</h1>
+     <div class="user-menu">
+      <div class="user-avatar">
+       AD
+      </div><span>Admin Premium</span>
+     </div>
+    </div>
+    <div class="content-area"><!-- Seção: Cadastrar Novo Responsável -->
+     <div class="export-panel">
+      <h3>
+       <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="8.5" cy="7" r="4" /> <line x1="20" y1="8" x2="20" y2="14" /> <line x1="23" y1="11" x2="17" y2="11" />
+       </svg> Cadastrar Novo Responsável</h3>
+      <p style="color: #718096; margin-bottom: 24px; font-size: 14px;">Cadastre responsáveis que poderão adicionar e gerenciar alunos nos projetos</p>
+      <form id="form-novo-responsavel" onsubmit="event.preventDefault(); cadastrarResponsavel();">
+       <div class="filter-grid">
+        <div class="filter-group"><label>Nome Completo *</label> <input type="text" id="resp-nome" placeholder="Ex: Maria Silva" required>
+        </div>
+        <div class="filter-group"><label>E-mail *</label> <input type="email" id="resp-email" placeholder="maria@email.com" required>
+        </div>
+        <div class="filter-group"><label>Telefone *</label> <input type="tel" id="resp-telefone" placeholder="(11) 98765-4321" required>
+        </div>
+        <div class="filter-group"><label>CPF *</label> <input type="text" id="resp-cpf" placeholder="000.000.000-00" required>
+        </div>
+        <div class="filter-group"><label>Endereço</label> <input type="text" id="resp-endereco" placeholder="Rua, número, bairro">
+        </div>
+        <div class="filter-group"><label>Cidade</label> <input type="text" id="resp-cidade" placeholder="São Paulo">
+        </div>
+        <div class="filter-group"><label>Senha Inicial *</label> <input type="password" id="resp-senha" placeholder="Mínimo 6 caracteres" required>
+        </div>
+        <div class="filter-group"><label>Permissão de Acesso *</label> <select id="resp-permissao" required> <option value="">Selecione...</option> <option value="basico">Básico - Apenas visualizar alunos</option> <option value="cadastro">Cadastro - Adicionar e editar alunos</option> <option value="completo">Completo - Gerenciar alunos e frequência</option> </select>
+        </div>
+       </div>
+       <div style="margin-top: 24px;"><label style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #2d3748; cursor: pointer;"> <input type="checkbox" id="resp-autorizado" checked style="width: 18px; height: 18px;"> <span>Autorizar acesso imediatamente</span> </label>
+       </div><button type="submit" class="btn-add" style="margin-top: 24px;">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="8.5" cy="7" r="4" /> <line x1="20" y1="8" x2="20" y2="14" /> <line x1="23" y1="11" x2="17" y2="11" />
+        </svg> Cadastrar Responsável </button>
+      </form>
+     </div><!-- Seção: Solicitações Pendentes -->
+     <div class="realtime-section" style="background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);">
+      <div class="realtime-header">
+       <h2>
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10" /> <polyline points="12 6 12 12 16 14" />
+        </svg> Solicitações Pendentes de Autorização</h2><span class="badge" style="background: rgba(255,255,255,0.3); color: white;">3 Pendentes</span>
+      </div>
+      <p style="opacity: 0.9; margin-bottom: 20px;">Responsáveis que se cadastraram e aguardam sua aprovação para acessar o sistema</p>
+      <div id="solicitacoes-lista"><!-- Solicitação 1 -->
+       <div class="activity-item" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); margin-bottom: 16px; border-radius: 12px; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 16px;">
+         <div style="flex: 1; min-width: 250px;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+           <div class="user-avatar" style="width: 50px; height: 50px; font-size: 18px;">
+            JS
+           </div>
+           <div>
+            <h4 style="font-size: 18px; margin-bottom: 4px;">João Santos</h4>
+            <div class="activity-time" style="color: rgba(255,255,255,0.8);">
+             Solicitou há 2 horas
+            </div>
+           </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 14px;">
+           <div><strong style="opacity: 0.9;">📧 E-mail:</strong><br>
+             joao.santos@email.com
+           </div>
+           <div><strong style="opacity: 0.9;">📱 Telefone:</strong><br>
+             (11) 99876-5432
+           </div>
+           <div><strong style="opacity: 0.9;">🆔 CPF:</strong><br>
+             123.456.789-00
+           </div>
+           <div><strong style="opacity: 0.9;">📍 Endereço:</strong><br>
+             Rua das Palmeiras, 456
+           </div>
+          </div>
+         </div>
+         <div style="display: flex; gap: 12px; flex-wrap: wrap;"><button class="export-btn" style="background: #48bb78; color: white; border-color: #48bb78;" onclick="aprovarSolicitacao('João Santos')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="20 6 9 17 4 12" />
+           </svg> Aprovar </button> <button class="export-btn" style="background: #f56565; color: white; border-color: #f56565;" onclick="recusarSolicitacao('João Santos')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18" /> <line x1="6" y1="6" x2="18" y2="18" />
+           </svg> Recusar </button> <button class="export-btn" style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3);" onclick="verDetalhes('João Santos')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10" /> <line x1="12" y1="16" x2="12" y2="12" /> <line x1="12" y1="8" x2="12.01" y2="8" />
+           </svg> Detalhes </button>
+         </div>
+        </div>
+       </div><!-- Solicitação 2 -->
+       <div class="activity-item" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); margin-bottom: 16px; border-radius: 12px; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 16px;">
+         <div style="flex: 1; min-width: 250px;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+           <div class="user-avatar" style="width: 50px; height: 50px; font-size: 18px;">
+            MF
+           </div>
+           <div>
+            <h4 style="font-size: 18px; margin-bottom: 4px;">Mariana Ferreira</h4>
+            <div class="activity-time" style="color: rgba(255,255,255,0.8);">
+             Solicitou há 5 horas
+            </div>
+           </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 14px;">
+           <div><strong style="opacity: 0.9;">📧 E-mail:</strong><br>
+             mariana.f@email.com
+           </div>
+           <div><strong style="opacity: 0.9;">📱 Telefone:</strong><br>
+             (11) 98765-1234
+           </div>
+           <div><strong style="opacity: 0.9;">🆔 CPF:</strong><br>
+             987.654.321-00
+           </div>
+           <div><strong style="opacity: 0.9;">📍 Endereço:</strong><br>
+             Av. Paulista, 1000
+           </div>
+          </div>
+         </div>
+         <div style="display: flex; gap: 12px; flex-wrap: wrap;"><button class="export-btn" style="background: #48bb78; color: white; border-color: #48bb78;" onclick="aprovarSolicitacao('Mariana Ferreira')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="20 6 9 17 4 12" />
+           </svg> Aprovar </button> <button class="export-btn" style="background: #f56565; color: white; border-color: #f56565;" onclick="recusarSolicitacao('Mariana Ferreira')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18" /> <line x1="6" y1="6" x2="18" y2="18" />
+           </svg> Recusar </button> <button class="export-btn" style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3);" onclick="verDetalhes('Mariana Ferreira')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10" /> <line x1="12" y1="16" x2="12" y2="12" /> <line x1="12" y1="8" x2="12.01" y2="8" />
+           </svg> Detalhes </button>
+         </div>
+        </div>
+       </div><!-- Solicitação 3 -->
+       <div class="activity-item" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); margin-bottom: 16px; border-radius: 12px; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 16px;">
+         <div style="flex: 1; min-width: 250px;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+           <div class="user-avatar" style="width: 50px; height: 50px; font-size: 18px;">
+            RL
+           </div>
+           <div>
+            <h4 style="font-size: 18px; margin-bottom: 4px;">Roberto Lima</h4>
+            <div class="activity-time" style="color: rgba(255,255,255,0.8);">
+             Solicitou ontem
+            </div>
+           </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 14px;">
+           <div><strong style="opacity: 0.9;">📧 E-mail:</strong><br>
+             roberto.lima@email.com
+           </div>
+           <div><strong style="opacity: 0.9;">📱 Telefone:</strong><br>
+             (11) 97654-3210
+           </div>
+           <div><strong style="opacity: 0.9;">🆔 CPF:</strong><br>
+             456.789.123-00
+           </div>
+           <div><strong style="opacity: 0.9;">📍 Endereço:</strong><br>
+             Rua dos Esportes, 234
+           </div>
+          </div>
+         </div>
+         <div style="display: flex; gap: 12px; flex-wrap: wrap;"><button class="export-btn" style="background: #48bb78; color: white; border-color: #48bb78;" onclick="aprovarSolicitacao('Roberto Lima')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="20 6 9 17 4 12" />
+           </svg> Aprovar </button> <button class="export-btn" style="background: #f56565; color: white; border-color: #f56565;" onclick="recusarSolicitacao('Roberto Lima')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18" /> <line x1="6" y1="6" x2="18" y2="18" />
+           </svg> Recusar </button> <button class="export-btn" style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3);" onclick="verDetalhes('Roberto Lima')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10" /> <line x1="12" y1="16" x2="12" y2="12" /> <line x1="12" y1="8" x2="12.01" y2="8" />
+           </svg> Detalhes </button>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- Seção: Responsáveis Autorizados -->
+     <div class="table-container">
+      <div class="table-header">
+       <h2>
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /> <path d="M9 12l2 2 4-4" />
+        </svg> Respons��veis Autorizados</h2>
+       <div class="table-actions"><input type="text" class="search-box" placeholder="Buscar responsável..."> <select class="search-box" style="width: auto;"> <option value="todos">Todos os Status</option> <option value="ativo">Ativos</option> <option value="suspenso">Suspensos</option> </select>
+       </div>
+      </div>
+      <table class="data-table">
+       <thead>
+        <tr>
+         <th>Nome</th>
+         <th>E-mail</th>
+         <th>Telefone</th>
+         <th>Permissão</th>
+         <th>Status</th>
+         <th>Alunos Cadastrados</th>
+         <th>Ações</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td>Carlos Silva</td>
+         <td>carlos.silva@email.com</td>
+         <td>(11) 98765-4321</td>
+         <td><span class="badge badge-gold">Completo</span></td>
+         <td><span class="badge badge-green">Ativo</span></td>
+         <td>8 alunos</td>
+         <td><button class="export-btn" style="padding: 6px 12px; font-size: 12px;" onclick="editarPermissoes('Carlos Silva')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /> <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+           </svg> Editar </button> <button class="export-btn" style="padding: 6px 12px; font-size: 12px; background: #f6ad55; border-color: #f6ad55; color: white;" onclick="suspenderResponsavel('Carlos Silva')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10" /> <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+           </svg> Suspender </button></td>
+        </tr>
+        <tr>
+         <td>Ana Santos</td>
+         <td>ana.santos@email.com</td>
+         <td>(11) 97654-3210</td>
+         <td><span class="badge badge-blue">Cadastro</span></td>
+         <td><span class="badge badge-green">Ativo</span></td>
+         <td>5 alunos</td>
+         <td><button class="export-btn" style="padding: 6px 12px; font-size: 12px;" onclick="editarPermissoes('Ana Santos')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /> <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+           </svg> Editar </button> <button class="export-btn" style="padding: 6px 12px; font-size: 12px; background: #f6ad55; border-color: #f6ad55; color: white;" onclick="suspenderResponsavel('Ana Santos')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10" /> <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+           </svg> Suspender </button></td>
+        </tr>
+        <tr>
+         <td>Pedro Oliveira</td>
+         <td>pedro.oliveira@email.com</td>
+         <td>(11) 96543-2109</td>
+         <td><span class="badge" style="background: rgba(113, 128, 150, 0.1); color: #718096;">Básico</span></td>
+         <td><span class="badge badge-green">Ativo</span></td>
+         <td>3 alunos</td>
+         <td><button class="export-btn" style="padding: 6px 12px; font-size: 12px;" onclick="editarPermissoes('Pedro Oliveira')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /> <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+           </svg> Editar </button> <button class="export-btn" style="padding: 6px 12px; font-size: 12px; background: #f6ad55; border-color: #f6ad55; color: white;" onclick="suspenderResponsavel('Pedro Oliveira')">
+           <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10" /> <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+           </svg> Suspender </button></td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </main>
+  </div><!-- Tela: Exportar Relatórios -->
+  <div id="export-screen" class="dashboard-container hidden">
+   <aside class="sidebar">
+    <div class="sidebar-header">
+     <h2>
+      <svg viewbox="0 0 24 24" fill="currentColor" width="24" height="24"><circle cx="12" cy="12" r="10" />
+      </svg> SGE <span class="premium-label">PREMIUM</span></h2>
+    </div>
+    <nav class="sidebar-nav">
+     <div class="nav-item" onclick="showScreen('admin-dashboard')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+      </svg> Dashboard Premium
+     </div>
+     <div class="nav-item" onclick="showScreen('mapa-localizacao')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+      </svg> Mapa de Localização <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('analytics-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+      </svg> Analytics Avançado <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('realtime-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg> Monitoramento em Tempo Real <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item active" onclick="showScreen('export-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+      </svg> Exportar Relatórios <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('projetos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+      </svg> Projetos
+     </div>
+     <div class="nav-item" onclick="showScreen('responsaveis-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg> Responsáveis
+     </div>
+     <div class="nav-item" onclick="showScreen('alunos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+      </svg> Alunos
+     </div>
+    </nav>
+   </aside>
+   <main class="main-content">
+    <div class="top-bar">
+     <h1>Exportar Relatórios - Recurso Premium ★</h1>
+     <div class="user-menu">
+      <div class="user-avatar">
+       AD
+      </div><span>Admin Premium</span>
+     </div>
+    </div>
+    <div class="content-area">
+     <div class="export-panel">
+      <h3>Relatórios Disponíveis para Exportação</h3>
+      <p style="color: #718096; margin-bottom: 24px; font-size: 14px;">Exporte dados completos em diversos formatos para análise externa</p>
+      <div class="export-options"><button class="export-btn" onclick="exportar('projetos-pdf')">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /> <polyline points="14 2 14 8 20 8" /> <line x1="16" y1="13" x2="8" y2="13" /> <line x1="16" y1="17" x2="8" y2="17" /> <polyline points="10 9 9 9 8 9" />
+        </svg> Relatório de Projetos (PDF) </button> <button class="export-btn" onclick="exportar('alunos-excel')">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /> <polyline points="14 2 14 8 20 8" /> <line x1="9" y1="15" x2="15" y2="15" />
+        </svg> Lista de Alunos (Excel) </button> <button class="export-btn" onclick="exportar('frequencia-pdf')">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /> <line x1="16" y1="2" x2="16" y2="6" /> <line x1="8" y1="2" x2="8" y2="6" /> <line x1="3" y1="10" x2="21" y2="10" />
+        </svg> Relatório de Frequência (PDF) </button> <button class="export-btn" onclick="exportar('responsaveis-excel')">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg> Lista de Responsáveis (Excel) </button> <button class="export-btn" onclick="exportar('analytics-pdf')">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+        </svg> Relatório Analytics (PDF) </button> <button class="export-btn" onclick="exportar('completo-excel')">
+        <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+        </svg> Exportação Completa (Excel) </button>
+      </div>
+     </div>
+     <div class="export-panel">
+      <h3>Agendamento Automático de Relatórios</h3>
+      <p style="color: #718096; margin-bottom: 24px; font-size: 14px;">Configure envio automático de relatórios por e-mail</p>
+      <div class="filter-grid">
+       <div class="filter-group"><label>Tipo de Relatório</label> <select> <option>Relatório Mensal Completo</option> <option>Relatório Semanal de Frequência</option> <option>Relatório Diário de Atividades</option> </select>
+       </div>
+       <div class="filter-group"><label>Frequência</label> <select> <option>Diário</option> <option>Semanal</option> <option>Mensal</option> </select>
+       </div>
+       <div class="filter-group"><label>E-mail de Destino</label> <input type="email" placeholder="email@exemplo.com">
+       </div>
+       <div class="filter-group"><label>Formato</label> <select> <option>PDF</option> <option>Excel (.xlsx)</option> <option>Ambos</option> </select>
+       </div>
+      </div><button class="btn-add" style="margin-top: 20px;" onclick="agendarRelatorio()"> Agendar Envio Automático </button>
+     </div>
+    </div>
+   </main>
+  </div><!-- Outras telas (Projetos, Responsáveis, Alunos) - versão simplificada -->
+  <div id="projetos-list" class="dashboard-container hidden">
+   <aside class="sidebar">
+    <div class="sidebar-header">
+     <h2>
+      <svg viewbox="0 0 24 24" fill="currentColor" width="24" height="24"><circle cx="12" cy="12" r="10" />
+      </svg> SGE <span class="premium-label">PREMIUM</span></h2>
+    </div>
+    <nav class="sidebar-nav">
+     <div class="nav-item" onclick="showScreen('admin-dashboard')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+      </svg> Dashboard Premium
+     </div>
+     <div class="nav-item" onclick="showScreen('mapa-localizacao')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+      </svg> Mapa de Localização <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('analytics-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+      </svg> Analytics Avançado <span class="premium-icon">��</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('realtime-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg> Monitoramento em Tempo Real <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('export-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+      </svg> Exportar Relatórios <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item active" onclick="showScreen('projetos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+      </svg> Projetos
+     </div>
+     <div class="nav-item" onclick="showScreen('responsaveis-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg> Responsáveis
+     </div>
+     <div class="nav-item" onclick="showScreen('alunos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+      </svg> Alunos
+     </div>
+    </nav>
+   </aside>
+   <main class="main-content">
+    <div class="top-bar">
+     <h1>Projetos</h1>
+     <div class="user-menu">
+      <div class="user-avatar">
+       AD
+      </div><span>Admin Premium</span>
+     </div>
+    </div>
+    <div class="content-area">
+     <div class="table-container">
+      <div class="table-header">
+       <h2>Lista de Projetos</h2>
+       <div class="table-actions"><input type="text" class="search-box" placeholder="Buscar projeto..."> <button class="btn-add" onclick="novoProjeto()">+ Novo Projeto</button>
+       </div>
+      </div>
+      <table class="data-table">
+       <thead>
+        <tr>
+         <th>Nome</th>
+         <th>Modalidade</th>
+         <th>Local</th>
+         <th>Responsável</th>
+         <th>Alunos</th>
+         <th>Status</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td>Futebol Base Iniciante</td>
+         <td><span class="badge badge-blue">Futebol</span></td>
+         <td>Quadra Municipal - Centro</td>
+         <td>Carlos Silva</td>
+         <td>32 alunos</td>
+         <td><span class="badge badge-green">Ativo</span></td>
+        </tr>
+        <tr>
+         <td>Basquete Avançado</td>
+         <td><span class="badge badge-blue">Basquete</span></td>
+         <td>Ginásio Poliesportivo</td>
+         <td>Ana Santos</td>
+         <td>28 alunos</td>
+         <td><span class="badge badge-green">Ativo</span></td>
+        </tr>
+        <tr>
+         <td>Vôlei Juvenil</td>
+         <td><span class="badge badge-blue">Vôlei</span></td>
+         <td>Quadra Escola Municipal</td>
+         <td>Pedro Oliveira</td>
+         <td>27 alunos</td>
+         <td><span class="badge badge-green">Ativo</span></td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </main>
+  </div>
+  <div id="responsaveis-list" class="dashboard-container hidden">
+   <aside class="sidebar">
+    <div class="sidebar-header">
+     <h2>
+      <svg viewbox="0 0 24 24" fill="currentColor" width="24" height="24"><circle cx="12" cy="12" r="10" />
+      </svg> SGE <span class="premium-label">PREMIUM</span></h2>
+    </div>
+    <nav class="sidebar-nav">
+     <div class="nav-item" onclick="showScreen('admin-dashboard')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+      </svg> Dashboard Premium
+     </div>
+     <div class="nav-item" onclick="showScreen('mapa-localizacao')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+      </svg> Mapa de Localização <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('analytics-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+      </svg> Analytics Avançado <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('realtime-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg> Monitoramento em Tempo Real <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('export-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+      </svg> Exportar Relatórios <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('autorizacoes-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /> <path d="M9 12l2 2 4-4" />
+      </svg> Autorizar Responsáveis <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('projetos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+      </svg> Projetos
+     </div>
+     <div class="nav-item active" onclick="showScreen('responsaveis-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg> Responsáveis
+     </div>
+     <div class="nav-item" onclick="showScreen('alunos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+      </svg> Alunos
+     </div>
+    </nav>
+   </aside>
+   <main class="main-content">
+    <div class="top-bar">
+     <h1>Responsáveis</h1>
+     <div class="user-menu">
+      <div class="user-avatar">
+       AD
+      </div><span>Admin Premium</span>
+     </div>
+    </div>
+    <div class="content-area">
+     <div class="table-container">
+      <div class="table-header">
+       <h2>Lista de Responsáveis</h2>
+       <div class="table-actions"><input type="text" class="search-box" placeholder="Buscar responsável..."> <button class="btn-add" onclick="novoResponsavel()">+ Novo Responsável</button>
+       </div>
+      </div>
+      <table class="data-table">
+       <thead>
+        <tr>
+         <th>Nome</th>
+         <th>E-mail</th>
+         <th>Telefone</th>
+         <th>Endereço</th>
+         <th>Projetos</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td>Carlos Silva</td>
+         <td>carlos.silva@email.com</td>
+         <td>(11) 98765-4321</td>
+         <td>Rua das Flores, 123</td>
+         <td><span class="badge badge-blue">2 Projetos</span></td>
+        </tr>
+        <tr>
+         <td>Ana Santos</td>
+         <td>ana.santos@email.com</td>
+         <td>(11) 97654-3210</td>
+         <td>Av. Principal, 456</td>
+         <td><span class="badge badge-blue">3 Projetos</span></td>
+        </tr>
+        <tr>
+         <td>Pedro Oliveira</td>
+         <td>pedro.oliveira@email.com</td>
+         <td>(11) 96543-2109</td>
+         <td>Rua dos Esportes, 789</td>
+         <td><span class="badge badge-blue">1 Projeto</span></td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </main>
+  </div>
+  <div id="alunos-list" class="dashboard-container hidden">
+   <aside class="sidebar">
+    <div class="sidebar-header">
+     <h2>
+      <svg viewbox="0 0 24 24" fill="currentColor" width="24" height="24"><circle cx="12" cy="12" r="10" />
+      </svg> SGE <span class="premium-label">PREMIUM</span></h2>
+    </div>
+    <nav class="sidebar-nav">
+     <div class="nav-item" onclick="showScreen('admin-dashboard')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" /> <rect x="14" y="3" width="7" height="7" /> <rect x="14" y="14" width="7" height="7" /> <rect x="3" y="14" width="7" height="7" />
+      </svg> Dashboard Premium
+     </div>
+     <div class="nav-item" onclick="showScreen('mapa-localizacao')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
+      </svg> Mapa de Localização <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('analytics-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" />
+      </svg> Analytics Avançado <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('realtime-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg> Monitoramento em Tempo Real <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('export-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" y1="15" x2="12" y2="3" />
+      </svg> Exportar Relatórios <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('autorizacoes-screen')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /> <path d="M9 12l2 2 4-4" />
+      </svg> Autorizar Responsáveis <span class="premium-icon">★</span>
+     </div>
+     <div class="nav-item" onclick="showScreen('projetos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />
+      </svg> Projetos
+     </div>
+     <div class="nav-item" onclick="showScreen('responsaveis-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M23 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg> Responsáveis
+     </div>
+     <div class="nav-item active" onclick="showScreen('alunos-list')">
+      <svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />
+      </svg> Alunos
+     </div>
+    </nav>
+   </aside>
+   <main class="main-content">
+    <div class="top-bar">
+     <h1>Alunos</h1>
+     <div class="user-menu">
+      <div class="user-avatar">
+       AD
+      </div><span>Admin Premium</span>
+     </div>
+    </div>
+    <div class="content-area">
+     <div class="table-container">
+      <div class="table-header">
+       <h2>Lista de Alunos</h2>
+       <div class="table-actions"><input type="text" class="search-box" placeholder="Buscar aluno..."> <button class="btn-add" onclick="novoAluno()">+ Novo Aluno</button>
+       </div>
+      </div>
+      <table class="data-table">
+       <thead>
+        <tr>
+         <th>Nome</th>
+         <th>Idade</th>
+         <th>Projeto</th>
+         <th>Telefone</th>
+         <th>Presença</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td>João Silva</td>
+         <td>14 anos</td>
+         <td><span class="badge badge-blue">Futebol Base</span></td>
+         <td>(11) 98888-7777</td>
+         <td><span class="badge badge-green">96%</span></td>
+        </tr>
+        <tr>
+         <td>Ana Costa</td>
+         <td>16 anos</td>
+         <td><span class="badge badge-blue">Basquete</span></td>
+         <td>(11) 97777-6666</td>
+         <td><span class="badge badge-green">94%</span></td>
+        </tr>
+        <tr>
+         <td>Lucas Oliveira</td>
+         <td>15 anos</td>
+         <td><span class="badge badge-blue">Vôlei</span></td>
+         <td>(11) 96666-5555</td>
+         <td><span class="badge badge-green">91%</span></td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </main>
+  </div>
+  <script>
+        const defaultConfig = {
+            system_name: "Sistema de Gestão Esportiva Premium",
+            welcome_text: "Bem-vindo à versão premium"
+        };
+
+        // Base de dados local
+        let projetos = [
+            { id: 1, nome: 'Futebol Base Iniciante', modalidade: 'Futebol', local: 'Quadra Municipal - Centro', responsavel: 'Carlos Silva', alunos: 32, status: 'Ativo', horario: '14h-16h', dias: 'Seg, Qua, Sex' },
+            { id: 2, nome: 'Basquete Avançado', modalidade: 'Basquete', local: 'Ginásio Poliesportivo', responsavel: 'Ana Santos', alunos: 28, status: 'Ativo', horario: '16h-18h', dias: 'Ter, Qui' },
+            { id: 3, nome: 'Vôlei Juvenil', modalidade: 'Vôlei', local: 'Quadra Escola Municipal', responsavel: 'Pedro Oliveira', alunos: 27, status: 'Ativo', horario: '15h-17h', dias: 'Seg, Qua' }
+        ];
+
+        let responsaveis = [
+            { id: 1, nome: 'Carlos Silva', email: 'carlos.silva@email.com', telefone: '(11) 98765-4321', cpf: '123.456.789-00', endereco: 'Rua das Flores, 123', cidade: 'São Paulo', permissao: 'Completo', status: 'Ativo', alunosCadastrados: 8 },
+            { id: 2, nome: 'Ana Santos', email: 'ana.santos@email.com', telefone: '(11) 97654-3210', cpf: '987.654.321-00', endereco: 'Av. Principal, 456', cidade: 'São Paulo', permissao: 'Cadastro', status: 'Ativo', alunosCadastrados: 5 },
+            { id: 3, nome: 'Pedro Oliveira', email: 'pedro.oliveira@email.com', telefone: '(11) 96543-2109', cpf: '456.789.123-00', endereco: 'Rua dos Esportes, 789', cidade: 'São Paulo', permissao: 'Básico', status: 'Ativo', alunosCadastrados: 3 }
+        ];
+
+        let alunos = [
+            { id: 1, nome: 'João Silva', idade: 14, dataNascimento: '2010-03-15', projeto: 'Futebol Base Iniciante', telefone: '(11) 98888-7777', responsavel: 'Carlos Silva', endereco: 'Rua A, 100', presenca: 96, status: 'Ativo' },
+            { id: 2, nome: 'Ana Costa', idade: 16, dataNascimento: '2008-07-22', projeto: 'Basquete Avançado', telefone: '(11) 97777-6666', responsavel: 'Ana Santos', endereco: 'Rua B, 200', presenca: 94, status: 'Ativo' },
+            { id: 3, nome: 'Lucas Oliveira', idade: 15, dataNascimento: '2009-11-08', projeto: 'Vôlei Juvenil', telefone: '(11) 96666-5555', responsavel: 'Pedro Oliveira', endereco: 'Rua C, 300', presenca: 91, status: 'Ativo' },
+            { id: 4, nome: 'Maria Santos', idade: 13, dataNascimento: '2011-05-30', projeto: 'Futebol Base Iniciante', telefone: '(11) 95555-4444', responsavel: 'Carlos Silva', endereco: 'Rua D, 400', presenca: 98, status: 'Ativo' },
+            { id: 5, nome: 'Pedro Costa', idade: 14, dataNascimento: '2010-09-12', projeto: 'Basquete Avançado', telefone: '(11) 94444-3333', responsavel: 'Ana Santos', endereco: 'Rua E, 500', presenca: 92, status: 'Ativo' }
+        ];
+
+        let solicitacoesPendentes = [
+            { id: 1, nome: 'João Santos', email: 'joao.santos@email.com', telefone: '(11) 99876-5432', cpf: '123.456.789-00', endereco: 'Rua das Palmeiras, 456', cidade: 'São Paulo', tempo: 'Há 2 horas' },
+            { id: 2, nome: 'Mariana Ferreira', email: 'mariana.f@email.com', telefone: '(11) 98765-1234', cpf: '987.654.321-00', endereco: 'Av. Paulista, 1000', cidade: 'São Paulo', tempo: 'Há 5 horas' },
+            { id: 3, nome: 'Roberto Lima', email: 'roberto.lima@email.com', telefone: '(11) 97654-3210', cpf: '456.789.123-00', endereco: 'Rua dos Esportes, 234', cidade: 'São Paulo', tempo: 'Ontem' }
+        ];
+
+        let editandoId = null;
+        let editandoTipo = null;
+
+        function showScreen(screenId) {
+            const screens = [
+                'login-screen', 'admin-dashboard', 'responsavel-dashboard', 'mapa-localizacao', 'analytics-screen',
+                'realtime-screen', 'export-screen', 'autorizacoes-screen', 'projetos-list', 'responsaveis-list', 'alunos-list'
+            ];
+            
+            screens.forEach(screen => {
+                const element = document.getElementById(screen);
+                if (element) {
+                    element.classList.add('hidden');
+                }
+            });
+            
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.remove('hidden');
+            }
+
+            // Atualizar listagens quando trocar de tela
+            if (screenId === 'projetos-list') renderProjetos();
+            if (screenId === 'responsaveis-list') renderResponsaveis();
+            if (screenId === 'alunos-list') renderAlunos();
+            if (screenId === 'autorizacoes-screen') renderSolicitacoes();
+            if (screenId === 'admin-dashboard') atualizarDashboard();
+        }
+
+        let usuarioAtual = null;
+
+        function loginAdmin() {
+            usuarioAtual = { tipo: 'admin', nome: 'Admin Premium' };
+            showScreen('admin-dashboard');
+            atualizarDashboard();
+        }
+
+        function loginResponsavel() {
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('password').value;
+            
+            if (!email || !senha) {
+                showToast('Por favor, preencha e-mail e senha.', 'info');
+                return;
+            }
+            
+            // Buscar responsável cadastrado
+            const resp = responsaveis.find(r => r.email.toLowerCase() === email.toLowerCase());
+            
+            if (!resp) {
+                showToast('E-mail não encontrado. Entre em contato com o administrador.', 'info');
+                return;
+            }
+            
+            if (resp.status !== 'Ativo') {
+                showToast('Sua conta ainda não foi autorizada pelo administrador.', 'info');
+                return;
+            }
+            
+            usuarioAtual = { tipo: 'responsavel', nome: resp.nome, id: resp.id, email: resp.email, permissao: resp.permissao };
+            
+            document.getElementById('responsavel-name').textContent = resp.nome;
+            const avatar = document.querySelector('#responsavel-dashboard .user-avatar');
+            avatar.textContent = resp.nome.split(' ').map(n => n[0]).join('').substring(0, 2);
+            
+            showScreen('responsavel-dashboard');
+            showResponsavelScreen('dashboard');
+        }
+
+        function logout() {
+            usuarioAtual = null;
+            showScreen('login-screen');
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function showResponsavelScreen(screen) {
+            // Atualizar menu ativo
+            const navItems = document.querySelectorAll('#responsavel-dashboard .nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            event?.currentTarget?.classList.add('active');
+            
+            const content = document.getElementById('responsavel-content');
+            const title = document.getElementById('responsavel-screen-title');
+            
+            switch(screen) {
+                case 'dashboard':
+                    title.textContent = 'Meu Painel';
+                    content.innerHTML = renderResponsavelDashboard();
+                    break;
+                case 'meus-alunos':
+                    title.textContent = 'Meus Alunos';
+                    content.innerHTML = renderMeusAlunos();
+                    break;
+                case 'projetos-disponiveis':
+                    title.textContent = 'Projetos Disponíveis';
+                    content.innerHTML = renderProjetosDisponiveis();
+                    break;
+                case 'historico':
+                    title.textContent = 'Histórico de Presença';
+                    content.innerHTML = renderHistoricoPresenca();
+                    break;
+            }
+        }
+
+        function renderResponsavelDashboard() {
+            const meusAlunos = alunos.filter(a => a.responsavel === usuarioAtual.nome);
+            const presencaMedia = meusAlunos.length > 0 
+                ? Math.round(meusAlunos.reduce((acc, a) => acc + a.presenca, 0) / meusAlunos.length)
+                : 0;
+            const projetosUnicos = [...new Set(meusAlunos.map(a => a.projeto))];
+            
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div>
+                                <div class="stat-card-value">${meusAlunos.length}</div>
+                                <div class="stat-card-label">Alunos Cadastrados</div>
+                            </div>
+                            <div class="stat-card-icon green">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div>
+                                <div class="stat-card-value">${projetosUnicos.length}</div>
+                                <div class="stat-card-label">Projetos Ativos</div>
+                            </div>
+                            <div class="stat-card-icon blue">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 6v6l4 2"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div>
+                                <div class="stat-card-value">${presencaMedia}%</div>
+                                <div class="stat-card-label">Presença Média</div>
+                            </div>
+                            <div class="stat-card-icon gold">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="premium-section" style="background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);">
+                    <h2>
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Bem-vindo, ${usuarioAtual.nome}!
+                    </h2>
+                    <p>Você tem permissão de acesso: <strong>${usuarioAtual.permissao}</strong></p>
+                    <p style="margin-top: 16px;">Aqui você pode gerenciar seus alunos cadastrados e acompanhar o desenvolvimento deles nos projetos esportivos.</p>
+                </div>
+                
+                ${meusAlunos.length > 0 ? `
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>Seus Alunos Recentes</h2>
+                            <button class="btn-add" onclick="showResponsavelScreen('meus-alunos')">Ver Todos</button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Idade</th>
+                                    <th>Projeto</th>
+                                    <th>Presença</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${meusAlunos.slice(0, 5).map(a => `
+                                    <tr>
+                                        <td>${a.nome}</td>
+                                        <td>${a.idade} anos</td>
+                                        <td><span class="badge badge-blue">${a.projeto}</span></td>
+                                        <td><span class="badge badge-green">${a.presenca}%</span></td>
+                                        <td><span class="badge badge-green">${a.status}</span></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                ` : `
+                    <div class="export-panel">
+                        <h3>Nenhum Aluno Cadastrado</h3>
+                        <p style="color: #718096; margin-bottom: 24px;">Você ainda não cadastrou nenhum aluno. Comece agora adicionando seus alunos aos projetos disponíveis!</p>
+                        <button class="btn-add" onclick="showResponsavelScreen('meus-alunos')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="8.5" cy="7" r="4"/>
+                                <line x1="20" y1="8" x2="20" y2="14"/>
+                                <line x1="23" y1="11" x2="17" y2="11"/>
+                            </svg>
+                            Cadastrar Primeiro Aluno
+                        </button>
+                    </div>
+                `}
+            `;
+        }
+
+        function renderMeusAlunos() {
+            const meusAlunos = alunos.filter(a => a.responsavel === usuarioAtual.nome);
+            const podeEditar = ['Cadastro', 'Completo'].includes(usuarioAtual.permissao);
+            
+            return `
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Lista de Alunos (${meusAlunos.length})</h2>
+                        <div class="table-actions">
+                            <input type="text" class="search-box" placeholder="Buscar aluno..." onkeyup="filtrarMeusAlunos(this.value)">
+                            ${podeEditar ? '<button class="btn-add" onclick="responsavelNovoAluno()">+ Novo Aluno</button>' : ''}
+                        </div>
+                    </div>
+                    ${meusAlunos.length > 0 ? `
+                        <table class="data-table" id="tabela-meus-alunos">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Idade</th>
+                                    <th>Data Nascimento</th>
+                                    <th>Projeto</th>
+                                    <th>Telefone</th>
+                                    <th>Presença</th>
+                                    ${podeEditar ? '<th>Ações</th>' : ''}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${meusAlunos.map(a => `
+                                    <tr data-nome="${a.nome.toLowerCase()}">
+                                        <td>${a.nome}</td>
+                                        <td>${a.idade} anos</td>
+                                        <td>${new Date(a.dataNascimento).toLocaleDateString('pt-BR')}</td>
+                                        <td><span class="badge badge-blue">${a.projeto}</span></td>
+                                        <td>${a.telefone}</td>
+                                        <td><span class="badge badge-green">${a.presenca}%</span></td>
+                                        ${podeEditar ? `
+                                            <td>
+                                                <button class="export-btn" style="padding: 6px 12px; font-size: 12px;" onclick="responsavelEditarAluno(${a.id})">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                    </svg>
+                                                    Editar
+                                                </button>
+                                            </td>
+                                        ` : ''}
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    ` : `
+                        <div style="padding: 60px; text-align: center; color: #718096;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="64" height="64" style="margin: 0 auto 20px; opacity: 0.3;">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <h3 style="color: #2d3748; margin-bottom: 12px;">Nenhum aluno cadastrado</h3>
+                            <p>Comece adicionando seus alunos aos projetos!</p>
+                        </div>
+                    `}
+                </div>
+                
+                ${!podeEditar ? `
+                    <div class="export-panel" style="background: #fff3cd; border: 2px solid #ffc107;">
+                        <h3 style="color: #856404;">⚠️ Acesso Limitado</h3>
+                        <p style="color: #856404;">Sua permissão atual é <strong>"${usuarioAtual.permissao}"</strong>. Você pode apenas visualizar os alunos. Para editar ou adicionar novos alunos, entre em contato com o administrador para solicitar permissões adicionais.</p>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        function renderProjetosDisponiveis() {
+            return `
+                <div class="filter-panel">
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                        </svg>
+                        Filtrar Projetos
+                    </h3>
+                    <div class="filter-grid">
+                        <div class="filter-group">
+                            <label>Modalidade</label>
+                            <select onchange="filtrarProjetosResp(this.value)">
+                                <option value="todas">Todas</option>
+                                <option value="Futebol">Futebol</option>
+                                <option value="Basquete">Basquete</option>
+                                <option value="Vôlei">Vôlei</option>
+                                <option value="Natação">Natação</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Buscar</label>
+                            <input type="text" placeholder="Nome do projeto..." onkeyup="buscarProjetosResp(this.value)">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Projetos Disponíveis (${projetos.length})</h2>
+                    </div>
+                    <table class="data-table" id="tabela-projetos-resp">
+                        <thead>
+                            <tr>
+                                <th>Nome do Projeto</th>
+                                <th>Modalidade</th>
+                                <th>Local</th>
+                                <th>Horário</th>
+                                <th>Dias</th>
+                                <th>Vagas</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${projetos.map(p => `
+                                <tr data-modalidade="${p.modalidade}" data-nome="${p.nome.toLowerCase()}">
+                                    <td><strong>${p.nome}</strong></td>
+                                    <td><span class="badge badge-blue">${p.modalidade}</span></td>
+                                    <td>${p.local}</td>
+                                    <td>${p.horario || 'Consultar'}</td>
+                                    <td>${p.dias || 'Consultar'}</td>
+                                    <td>${p.alunos} alunos</td>
+                                    <td><span class="badge badge-green">${p.status}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="export-panel">
+                    <h3>ℹ️ Informações sobre os Projetos</h3>
+                    <p style="color: #718096; margin-bottom: 16px;">Todos os projetos listados estão disponíveis para inscrição. Para cadastrar um aluno em um projeto específico, vá até a aba "Meus Alunos" e adicione um novo aluno selecionando o projeto desejado.</p>
+                    <p style="color: #718096;">Para mais informações sobre horários, valores ou requisitos, entre em contato com o responsável do projeto ou com a administração.</p>
+                </div>
+            `;
+        }
+
+        function renderHistoricoPresenca() {
+            const meusAlunos = alunos.filter(a => a.responsavel === usuarioAtual.nome);
+            
+            return `
+                <div class="stats-grid">
+                    ${meusAlunos.map(a => `
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-card-label" style="margin-bottom: 8px;">${a.nome}</div>
+                                    <div class="stat-card-value" style="font-size: 28px;">${a.presenca}%</div>
+                                    <div class="stat-card-label" style="margin-top: 4px;">${a.projeto}</div>
+                                </div>
+                                <div class="stat-card-icon ${a.presenca >= 90 ? 'green' : a.presenca >= 70 ? 'gold' : 'purple'}">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                        ${a.presenca >= 90 ? '<polyline points="20 6 9 17 4 12"/>' : '<circle cx="12" cy="12" r="10"/>'}
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                ${meusAlunos.length > 0 ? `
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>Detalhamento de Presença</h2>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Aluno</th>
+                                    <th>Projeto</th>
+                                    <th>Presença</th>
+                                    <th>Status</th>
+                                    <th>Observações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${meusAlunos.map(a => `
+                                    <tr>
+                                        <td><strong>${a.nome}</strong></td>
+                                        <td>${a.projeto}</td>
+                                        <td><span class="badge ${a.presenca >= 90 ? 'badge-green' : 'badge-gold'}">${a.presenca}%</span></td>
+                                        <td>
+                                            ${a.presenca >= 90 
+                                                ? '<span class="badge badge-green">Excelente</span>' 
+                                                : a.presenca >= 75 
+                                                ? '<span class="badge" style="background: rgba(246, 173, 85, 0.1); color: #f6ad55;">Bom</span>' 
+                                                : '<span class="badge" style="background: rgba(245, 101, 101, 0.1); color: #f56565;">Atenção</span>'}
+                                        </td>
+                                        <td>
+                                            ${a.presenca >= 90 
+                                                ? 'Frequência regular' 
+                                                : a.presenca >= 75 
+                                                ? 'Algumas faltas registradas' 
+                                                : 'Requer atenção - muitas faltas'}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                ` : `
+                    <div class="export-panel">
+                        <h3>Nenhum Histórico Disponível</h3>
+                        <p style="color: #718096;">Você ainda não possui alunos cadastrados para visualizar o histórico de presença.</p>
+                    </div>
+                `}
+            `;
+        }
+
+        function responsavelNovoAluno() {
+            if (!['Cadastro', 'Completo'].includes(usuarioAtual.permissao)) {
+                showToast('Você não tem permissão para adicionar alunos.', 'info');
+                return;
+            }
+            
+            editandoId = null;
+            editandoTipo = 'aluno-responsavel';
+            
+            abrirModal('Cadastrar Novo Aluno', `
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="modal-nome" placeholder="Ex: Maria Silva" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Data de Nascimento *</label>
+                        <input type="date" id="modal-dataNascimento" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Projeto *</label>
+                        <select id="modal-projeto" required>
+                            <option value="">Selecione...</option>
+                            ${projetos.map(p => `<option value="${p.nome}">${p.nome}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Telefone *</label>
+                        <input type="tel" id="modal-telefone" placeholder="(11) 98765-4321" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Endereço</label>
+                        <input type="text" id="modal-endereco" placeholder="Rua, número, bairro">
+                    </div>
+                </div>
+                <p style="color: #718096; font-size: 14px; margin-top: 16px;">
+                    <strong>Responsável:</strong> ${usuarioAtual.nome} (você)
+                </p>
+                <button class="btn-add" style="margin-top: 20px;" onclick="salvarAlunoResponsavel()">Cadastrar Aluno</button>
+            `);
+        }
+
+        function responsavelEditarAluno(id) {
+            if (!['Cadastro', 'Completo'].includes(usuarioAtual.permissao)) {
+                showToast('Você não tem permissão para editar alunos.', 'info');
+                return;
+            }
+            
+            const aluno = alunos.find(a => a.id === id);
+            if (!aluno || aluno.responsavel !== usuarioAtual.nome) {
+                showToast('Você só pode editar seus próprios alunos.', 'info');
+                return;
+            }
+            
+            editandoId = id;
+            editandoTipo = 'aluno-responsavel';
+            
+            abrirModal('Editar Aluno', `
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="modal-nome" value="${aluno.nome}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Data de Nascimento *</label>
+                        <input type="date" id="modal-dataNascimento" value="${aluno.dataNascimento}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Projeto *</label>
+                        <select id="modal-projeto" required>
+                            ${projetos.map(p => `<option value="${p.nome}" ${aluno.projeto === p.nome ? 'selected' : ''}>${p.nome}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Telefone *</label>
+                        <input type="tel" id="modal-telefone" value="${aluno.telefone}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Endereço</label>
+                        <input type="text" id="modal-endereco" value="${aluno.endereco || ''}">
+                    </div>
+                </div>
+                <button class="btn-add" style="margin-top: 20px;" onclick="salvarAlunoResponsavel()">Salvar Alterações</button>
+            `);
+        }
+
+        function salvarAlunoResponsavel() {
+            const nome = document.getElementById('modal-nome').value;
+            const dataNascimento = document.getElementById('modal-dataNascimento').value;
+            const projeto = document.getElementById('modal-projeto').value;
+            const telefone = document.getElementById('modal-telefone').value;
+            const endereco = document.getElementById('modal-endereco').value;
+            
+            if (!nome || !dataNascimento || !projeto || !telefone) {
+                showToast('Preencha todos os campos obrigatórios!', 'info');
+                return;
+            }
+            
+            const idade = calcularIdade(dataNascimento);
+            
+            if (editandoId) {
+                const index = alunos.findIndex(a => a.id === editandoId);
+                alunos[index] = { ...alunos[index], nome, dataNascimento, idade, projeto, telefone, endereco };
+                showToast('Aluno atualizado com sucesso!', 'success');
+            } else {
+                const novoId = Math.max(...alunos.map(a => a.id), 0) + 1;
+                alunos.push({
+                    id: novoId,
+                    nome,
+                    dataNascimento,
+                    idade,
+                    projeto,
+                    telefone,
+                    responsavel: usuarioAtual.nome,
+                    endereco,
+                    presenca: 100,
+                    status: 'Ativo'
+                });
+                showToast('Aluno cadastrado com sucesso!', 'success');
+            }
+            
+            fecharModal();
+            showResponsavelScreen('meus-alunos');
+        }
+
+        function filtrarMeusAlunos(termo) {
+            const linhas = document.querySelectorAll('#tabela-meus-alunos tbody tr');
+            linhas.forEach(linha => {
+                const nome = linha.getAttribute('data-nome');
+                if (nome.includes(termo.toLowerCase())) {
+                    linha.style.display = '';
+                } else {
+                    linha.style.display = 'none';
+                }
+            });
+        }
+
+        function filtrarProjetosResp(modalidade) {
+            const linhas = document.querySelectorAll('#tabela-projetos-resp tbody tr');
+            linhas.forEach(linha => {
+                const mod = linha.getAttribute('data-modalidade');
+                if (modalidade === 'todas' || mod === modalidade) {
+                    linha.style.display = '';
+                } else {
+                    linha.style.display = 'none';
+                }
+            });
+        }
+
+        function buscarProjetosResp(termo) {
+            const linhas = document.querySelectorAll('#tabela-projetos-resp tbody tr');
+            linhas.forEach(linha => {
+                const nome = linha.getAttribute('data-nome');
+                if (nome.includes(termo.toLowerCase())) {
+                    linha.style.display = '';
+                } else {
+                    linha.style.display = 'none';
+                }
+            });
+        }
+
+        function atualizarDashboard() {
+            document.querySelector('#admin-dashboard .stat-card:nth-child(1) .stat-card-value').textContent = projetos.length;
+            document.querySelector('#admin-dashboard .stat-card:nth-child(2) .stat-card-value').textContent = alunos.length;
+            document.querySelector('#admin-dashboard .stat-card:nth-child(3) .stat-card-value').textContent = responsaveis.length;
+            
+            const presencaMedia = Math.round(alunos.reduce((acc, a) => acc + a.presenca, 0) / alunos.length);
+            document.querySelector('#admin-dashboard .stat-card:nth-child(4) .stat-card-value').textContent = presencaMedia + '%';
+        }
+
+        // ===== PROJETOS =====
+        function renderProjetos() {
+            const tbody = document.querySelector('#projetos-list .data-table tbody');
+            tbody.innerHTML = projetos.map(p => `
+                <tr>
+                    <td>${p.nome}</td>
+                    <td><span class="badge badge-blue">${p.modalidade}</span></td>
+                    <td>${p.local}</td>
+                    <td>${p.responsavel}</td>
+                    <td>${p.alunos} alunos</td>
+                    <td><span class="badge badge-green">${p.status}</span></td>
+                    <td>
+                        <button class="export-btn" style="padding: 6px 12px; font-size: 12px;" onclick="editarProjeto(${p.id})">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Editar
+                        </button>
+                        <button class="export-btn" style="padding: 6px 12px; font-size: 12px; background: #f56565; border-color: #f56565; color: white;" onclick="deletarProjeto(${p.id})">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                            Excluir
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function novoProjeto() {
+            editandoId = null;
+            editandoTipo = 'projeto';
+            abrirModal('Modal Novo Projeto', `
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Nome do Projeto *</label>
+                        <input type="text" id="modal-nome" placeholder="Ex: Futebol Iniciante" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Modalidade *</label>
+                        <select id="modal-modalidade" required>
+                            <option value="">Selecione...</option>
+                            <option value="Futebol">Futebol</option>
+                            <option value="Basquete">Basquete</option>
+                            <option value="Vôlei">Vôlei</option>
+                            <option value="Natação">Natação</option>
+                            <option value="Handebol">Handebol</option>
+                            <option value="Judô">Judô</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Local *</label>
+                        <input type="text" id="modal-local" placeholder="Ex: Quadra Municipal" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Responsável *</label>
+                        <select id="modal-responsavel" required>
+                            <option value="">Selecione...</option>
+                            ${responsaveis.map(r => `<option value="${r.nome}">${r.nome}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Horário</label>
+                        <input type="text" id="modal-horario" placeholder="Ex: 14h-16h">
+                    </div>
+                    <div class="filter-group">
+                        <label>Dias da Semana</label>
+                        <input type="text" id="modal-dias" placeholder="Ex: Seg, Qua, Sex">
+                    </div>
+                </div>
+                <button class="btn-add" style="margin-top: 20px;" onclick="salvarProjeto()">Salvar Projeto</button>
+            `);
+        }
+
+        function editarProjeto(id) {
+            const projeto = projetos.find(p => p.id === id);
+            if (!projeto) return;
+            
+            editandoId = id;
+            editandoTipo = 'projeto';
+            
+            abrirModal('Editar Projeto', `
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Nome do Projeto *</label>
+                        <input type="text" id="modal-nome" value="${projeto.nome}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Modalidade *</label>
+                        <select id="modal-modalidade" required>
+                            <option value="Futebol" ${projeto.modalidade === 'Futebol' ? 'selected' : ''}>Futebol</option>
+                            <option value="Basquete" ${projeto.modalidade === 'Basquete' ? 'selected' : ''}>Basquete</option>
+                            <option value="Vôlei" ${projeto.modalidade === 'Vôlei' ? 'selected' : ''}>Vôlei</option>
+                            <option value="Natação" ${projeto.modalidade === 'Natação' ? 'selected' : ''}>Natação</option>
+                            <option value="Handebol" ${projeto.modalidade === 'Handebol' ? 'selected' : ''}>Handebol</option>
+                            <option value="Judô" ${projeto.modalidade === 'Judô' ? 'selected' : ''}>Judô</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Local *</label>
+                        <input type="text" id="modal-local" value="${projeto.local}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Responsável *</label>
+                        <select id="modal-responsavel" required>
+                            ${responsaveis.map(r => `<option value="${r.nome}" ${projeto.responsavel === r.nome ? 'selected' : ''}>${r.nome}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Horário</label>
+                        <input type="text" id="modal-horario" value="${projeto.horario || ''}">
+                    </div>
+                    <div class="filter-group">
+                        <label>Dias da Semana</label>
+                        <input type="text" id="modal-dias" value="${projeto.dias || ''}">
+                    </div>
+                </div>
+                <button class="btn-add" style="margin-top: 20px;" onclick="salvarProjeto()">Salvar Alterações</button>
+            `);
+        }
+
+        function salvarProjeto() {
+            const nome = document.getElementById('modal-nome').value;
+            const modalidade = document.getElementById('modal-modalidade').value;
+            const local = document.getElementById('modal-local').value;
+            const responsavel = document.getElementById('modal-responsavel').value;
+            const horario = document.getElementById('modal-horario').value;
+            const dias = document.getElementById('modal-dias').value;
+            
+            if (!nome || !modalidade || !local || !responsavel) {
+                showToast('Preencha todos os campos obrigatórios!', 'info');
+                return;
+            }
+            
+            if (editandoId) {
+                const index = projetos.findIndex(p => p.id === editandoId);
+                projetos[index] = { ...projetos[index], nome, modalidade, local, responsavel, horario, dias };
+                showToast('Projeto atualizado com sucesso!', 'success');
+            } else {
+                const novoId = Math.max(...projetos.map(p => p.id), 0) + 1;
+                projetos.push({ id: novoId, nome, modalidade, local, responsavel, horario, dias, alunos: 0, status: 'Ativo' });
+                showToast('Projeto criado com sucesso!', 'success');
+            }
+            
+            fecharModal();
+            renderProjetos();
+            atualizarDashboard();
+        }
+
+        function deletarProjeto(id) {
+            abrirModalConfirmacao(
+                'Excluir Projeto',
+                'Tem certeza que deseja excluir este projeto? Esta ação não pode ser desfeita.',
+                () => {
+                    projetos = projetos.filter(p => p.id !== id);
+                    renderProjetos();
+                    atualizarDashboard();
+                    showToast('Projeto excluído com sucesso!', 'success');
+                }
+            );
+        }
+
+        // ===== RESPONSÁVEIS =====
+        function renderResponsaveis() {
+            const tbody = document.querySelector('#responsaveis-list .data-table tbody');
+            tbody.innerHTML = responsaveis.map(r => `
+                <tr>
+                    <td>${r.nome}</td>
+                    <td>${r.email}</td>
+                    <td>${r.telefone}</td>
+                    <td>${r.endereco}</td>
+                    <td><span class="badge badge-blue">${r.alunosCadastrados} alunos</span></td>
+                    <td>
+                        <button class="export-btn" style="padding: 6px 12px; font-size: 12px;" onclick="editarResponsavel(${r.id})">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Editar
+                        </button>
+                        <button class="export-btn" style="padding: 6px 12px; font-size: 12px; background: #f56565; border-color: #f56565; color: white;" onclick="deletarResponsavel(${r.id})">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                            Excluir
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function novoResponsavel() {
+            editandoId = null;
+            editandoTipo = 'responsavel';
+            abrirModal('Novo Responsável', `
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="modal-nome" placeholder="Ex: João Silva" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>E-mail *</label>
+                        <input type="email" id="modal-email" placeholder="joao@email.com" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Telefone *</label>
+                        <input type="tel" id="modal-telefone" placeholder="(11) 98765-4321" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>CPF *</label>
+                        <input type="text" id="modal-cpf" placeholder="000.000.000-00" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Endereço</label>
+                        <input type="text" id="modal-endereco" placeholder="Rua, número, bairro">
+                    </div>
+                    <div class="filter-group">
+                        <label>Cidade</label>
+                        <input type="text" id="modal-cidade" placeholder="São Paulo">
+                    </div>
+                </div>
+                <button class="btn-add" style="margin-top: 20px;" onclick="salvarResponsavel()">Salvar Responsável</button>
+            `);
+        }
+
+        function editarResponsavel(id) {
+            const resp = responsaveis.find(r => r.id === id);
+            if (!resp) return;
+            
+            editandoId = id;
+            editandoTipo = 'responsavel';
+            
+            abrirModal('Editar Responsável', `
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="modal-nome" value="${resp.nome}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>E-mail *</label>
+                        <input type="email" id="modal-email" value="${resp.email}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Telefone *</label>
+                        <input type="tel" id="modal-telefone" value="${resp.telefone}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>CPF *</label>
+                        <input type="text" id="modal-cpf" value="${resp.cpf}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Endereço</label>
+                        <input type="text" id="modal-endereco" value="${resp.endereco || ''}">
+                    </div>
+                    <div class="filter-group">
+                        <label>Cidade</label>
+                        <input type="text" id="modal-cidade" value="${resp.cidade || ''}">
+                    </div>
+                </div>
+                <button class="btn-add" style="margin-top: 20px;" onclick="salvarResponsavel()">Salvar Alterações</button>
+            `);
+        }
+
+        function salvarResponsavel() {
+            const nome = document.getElementById('modal-nome').value;
+            const email = document.getElementById('modal-email').value;
+            const telefone = document.getElementById('modal-telefone').value;
+            const cpf = document.getElementById('modal-cpf').value;
+            const endereco = document.getElementById('modal-endereco').value;
+            const cidade = document.getElementById('modal-cidade').value;
+            
+            if (!nome || !email || !telefone || !cpf) {
+                showToast('Preencha todos os campos obrigatórios!', 'info');
+                return;
+            }
+            
+            if (editandoId) {
+                const index = responsaveis.findIndex(r => r.id === editandoId);
+                responsaveis[index] = { ...responsaveis[index], nome, email, telefone, cpf, endereco, cidade };
+                showToast('Responsável atualizado com sucesso!', 'success');
+            } else {
+                const novoId = Math.max(...responsaveis.map(r => r.id), 0) + 1;
+                responsaveis.push({ id: novoId, nome, email, telefone, cpf, endereco, cidade, permissao: 'Cadastro', status: 'Ativo', alunosCadastrados: 0 });
+                showToast('Responsável criado com sucesso!', 'success');
+            }
+            
+            fecharModal();
+            renderResponsaveis();
+            atualizarDashboard();
+        }
+
+        function deletarResponsavel(id) {
+            abrirModalConfirmacao(
+                'Excluir Responsável',
+                'Tem certeza que deseja excluir este responsável?',
+                () => {
+                    responsaveis = responsaveis.filter(r => r.id !== id);
+                    renderResponsaveis();
+                    atualizarDashboard();
+                    showToast('Responsável excluído com sucesso!', 'success');
+                }
+            );
+        }
+
+        // ===== ALUNOS =====
+        function renderAlunos() {
+            const tbody = document.querySelector('#alunos-list .data-table tbody');
+            tbody.innerHTML = alunos.map(a => `
+                <tr>
+                    <td>${a.nome}</td>
+                    <td>${a.idade} anos</td>
+                    <td><span class="badge badge-blue">${a.projeto}</span></td>
+                    <td>${a.telefone}</td>
+                    <td><span class="badge badge-green">${a.presenca}%</span></td>
+                    <td>
+                        <button class="export-btn" style="padding: 6px 12px; font-size: 12px;" onclick="editarAluno(${a.id})">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Editar
+                        </button>
+                        <button class="export-btn" style="padding: 6px 12px; font-size: 12px; background: #f56565; border-color: #f56565; color: white;" onclick="deletarAluno(${a.id})">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                            Excluir
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function novoAluno() {
+            editandoId = null;
+            editandoTipo = 'aluno';
+            abrirModal('Novo Aluno', `
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="modal-nome" placeholder="Ex: Maria Silva" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Data de Nascimento *</label>
+                        <input type="date" id="modal-dataNascimento" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Projeto *</label>
+                        <select id="modal-projeto" required>
+                            <option value="">Selecione...</option>
+                            ${projetos.map(p => `<option value="${p.nome}">${p.nome}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Telefone *</label>
+                        <input type="tel" id="modal-telefone" placeholder="(11) 98765-4321" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Responsável *</label>
+                        <select id="modal-responsavel" required>
+                            <option value="">Selecione...</option>
+                            ${responsaveis.map(r => `<option value="${r.nome}">${r.nome}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Endereço</label>
+                        <input type="text" id="modal-endereco" placeholder="Rua, número, bairro">
+                    </div>
+                </div>
+                <button class="btn-add" style="margin-top: 20px;" onclick="salvarAluno()">Salvar Aluno</button>
+            `);
+        }
+
+        function editarAluno(id) {
+            const aluno = alunos.find(a => a.id === id);
+            if (!aluno) return;
+            
+            editandoId = id;
+            editandoTipo = 'aluno';
+            
+            abrirModal('Editar Aluno', `
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="modal-nome" value="${aluno.nome}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Data de Nascimento *</label>
+                        <input type="date" id="modal-dataNascimento" value="${aluno.dataNascimento}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Projeto *</label>
+                        <select id="modal-projeto" required>
+                            ${projetos.map(p => `<option value="${p.nome}" ${aluno.projeto === p.nome ? 'selected' : ''}>${p.nome}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Telefone *</label>
+                        <input type="tel" id="modal-telefone" value="${aluno.telefone}" required>
+                    </div>
+                    <div class="filter-group">
+                        <label>Responsável *</label>
+                        <select id="modal-responsavel" required>
+                            ${responsaveis.map(r => `<option value="${r.nome}" ${aluno.responsavel === r.nome ? 'selected' : ''}>${r.nome}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Endereço</label>
+                        <input type="text" id="modal-endereco" value="${aluno.endereco || ''}">
+                    </div>
+                </div>
+                <button class="btn-add" style="margin-top: 20px;" onclick="salvarAluno()">Salvar Alterações</button>
+            `);
+        }
+
+        function salvarAluno() {
+            const nome = document.getElementById('modal-nome').value;
+            const dataNascimento = document.getElementById('modal-dataNascimento').value;
+            const projeto = document.getElementById('modal-projeto').value;
+            const telefone = document.getElementById('modal-telefone').value;
+            const responsavel = document.getElementById('modal-responsavel').value;
+            const endereco = document.getElementById('modal-endereco').value;
+            
+            if (!nome || !dataNascimento || !projeto || !telefone || !responsavel) {
+                showToast('Preencha todos os campos obrigatórios!', 'info');
+                return;
+            }
+            
+            const idade = calcularIdade(dataNascimento);
+            
+            if (editandoId) {
+                const index = alunos.findIndex(a => a.id === editandoId);
+                alunos[index] = { ...alunos[index], nome, dataNascimento, idade, projeto, telefone, responsavel, endereco };
+                showToast('Aluno atualizado com sucesso!', 'success');
+            } else {
+                const novoId = Math.max(...alunos.map(a => a.id), 0) + 1;
+                alunos.push({ id: novoId, nome, dataNascimento, idade, projeto, telefone, responsavel, endereco, presenca: 100, status: 'Ativo' });
+                showToast('Aluno criado com sucesso!', 'success');
+            }
+            
+            fecharModal();
+            renderAlunos();
+            atualizarDashboard();
+        }
+
+        function deletarAluno(id) {
+            abrirModalConfirmacao(
+                'Excluir Aluno',
+                'Tem certeza que deseja excluir este aluno?',
+                () => {
+                    alunos = alunos.filter(a => a.id !== id);
+                    renderAlunos();
+                    atualizarDashboard();
+                    showToast('Aluno excluído com sucesso!', 'success');
+                }
+            );
+        }
+
+        function calcularIdade(dataNascimento) {
+            const hoje = new Date();
+            const nascimento = new Date(dataNascimento);
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            const mes = hoje.getMonth() - nascimento.getMonth();
+            if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+                idade--;
+            }
+            return idade;
+        }
+
+        // ===== AUTORIZAÇÕES =====
+        function cadastrarResponsavel() {
+            const nome = document.getElementById('resp-nome').value;
+            const email = document.getElementById('resp-email').value;
+            const telefone = document.getElementById('resp-telefone').value;
+            const cpf = document.getElementById('resp-cpf').value;
+            const endereco = document.getElementById('resp-endereco').value;
+            const cidade = document.getElementById('resp-cidade').value;
+            const permissao = document.getElementById('resp-permissao').value;
+            const autorizado = document.getElementById('resp-autorizado').checked;
+            
+            if (!nome || !email || !telefone || !cpf || !permissao) {
+                showToast('Por favor, preencha todos os campos obrigatórios.', 'info');
+                return;
+            }
+            
+            const novoId = Math.max(...responsaveis.map(r => r.id), 0) + 1;
+            responsaveis.push({
+                id: novoId,
+                nome,
+                email,
+                telefone,
+                cpf,
+                endereco,
+                cidade,
+                permissao: permissao === 'basico' ? 'Básico' : permissao === 'cadastro' ? 'Cadastro' : 'Completo',
+                status: autorizado ? 'Ativo' : 'Pendente',
+                alunosCadastrados: 0
+            });
+            
+            document.getElementById('form-novo-responsavel').reset();
+            
+            const status = autorizado ? 'autorizado e ativo' : 'cadastrado, mas aguardando sua confirmação final';
+            showToast(`Responsável ${nome} foi ${status} com sucesso!`, 'success');
+            atualizarDashboard();
+        }
+
+        function renderSolicitacoes() {
+            const lista = document.getElementById('solicitacoes-lista');
+            lista.innerHTML = solicitacoesPendentes.map(s => `
+                <div class="activity-item" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); margin-bottom: 16px; border-radius: 12px; padding: 20px;" data-id="${s.id}">
+                    <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 16px;">
+                        <div style="flex: 1; min-width: 250px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                <div class="user-avatar" style="width: 50px; height: 50px; font-size: 18px;">${s.nome.split(' ').map(n => n[0]).join('').substring(0,2)}</div>
+                                <div>
+                                    <h4 style="font-size: 18px; margin-bottom: 4px;">${s.nome}</h4>
+                                    <div class="activity-time" style="color: rgba(255,255,255,0.8);">Solicitou ${s.tempo}</div>
+                                </div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 14px;">
+                                <div><strong style="opacity: 0.9;">📧 E-mail:</strong><br>${s.email}</div>
+                                <div><strong style="opacity: 0.9;">📱 Telefone:</strong><br>${s.telefone}</div>
+                                <div><strong style="opacity: 0.9;">🆔 CPF:</strong><br>${s.cpf}</div>
+                                <div><strong style="opacity: 0.9;">📍 Endereço:</strong><br>${s.endereco}</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <button class="export-btn" style="background: #48bb78; color: white; border-color: #48bb78;" onclick="aprovarSolicitacao(${s.id})">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                Aprovar
+                            </button>
+                            <button class="export-btn" style="background: #f56565; color: white; border-color: #f56565;" onclick="recusarSolicitacao(${s.id})">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                Recusar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            atualizarContadorPendentes();
+        }
+
+        function aprovarSolicitacao(id) {
+            const solicitacao = solicitacoesPendentes.find(s => s.id === id);
+            if (!solicitacao) return;
+            
+            const novoId = Math.max(...responsaveis.map(r => r.id), 0) + 1;
+            responsaveis.push({
+                id: novoId,
+                nome: solicitacao.nome,
+                email: solicitacao.email,
+                telefone: solicitacao.telefone,
+                cpf: solicitacao.cpf,
+                endereco: solicitacao.endereco,
+                cidade: solicitacao.cidade,
+                permissao: 'Cadastro',
+                status: 'Ativo',
+                alunosCadastrados: 0
+            });
+            
+            solicitacoesPendentes = solicitacoesPendentes.filter(s => s.id !== id);
+            renderSolicitacoes();
+            showToast(`Solicitação de ${solicitacao.nome} foi aprovada! O responsável receberá um e-mail de confirmação.`, 'success');
+            atualizarDashboard();
+        }
+
+        function recusarSolicitacao(id) {
+            const solicitacao = solicitacoesPendentes.find(s => s.id === id);
+            if (!solicitacao) return;
+            
+            solicitacoesPendentes = solicitacoesPendentes.filter(s => s.id !== id);
+            renderSolicitacoes();
+            showToast(`Solicitação de ${solicitacao.nome} foi recusada.`, 'info');
+        }
+
+        function atualizarContadorPendentes() {
+            const badge = document.querySelector('.realtime-section .badge');
+            if (badge) {
+                badge.textContent = `${solicitacoesPendentes.length} Pendentes`;
+            }
+        }
+
+        // ===== MODAL GENÉRICO =====
+        function abrirModal(titulo, conteudo) {
+            const modalHTML = `
+                <div id="modal-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px;" onclick="if(event.target.id === 'modal-overlay') fecharModal()">
+                    <div style="background: white; border-radius: 16px; padding: 32px; max-width: 800px; width: 100%; max-height: 90%; overflow-y: auto;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                            <h2 style="font-size: 24px; color: #1a202c;">${titulo}</h2>
+                            <button onclick="fecharModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #718096; line-height: 1;">&times;</button>
+                        </div>
+                        ${conteudo}
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        function fecharModal() {
+            const modal = document.getElementById('modal-overlay');
+            if (modal) modal.remove();
+        }
+
+        function abrirModalConfirmacao(titulo, mensagem, onConfirm) {
+            abrirModal(titulo, `
+                <p style="font-size: 16px; color: #2d3748; margin-bottom: 24px;">${mensagem}</p>
+                <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="export-btn" onclick="fecharModal()">Cancelar</button>
+                    <button class="export-btn" style="background: #f56565; color: white; border-color: #f56565;" onclick="fecharModal(); (${onConfirm.toString()})()">Confirmar</button>
+                </div>
+            `);
+        }
+
+        // ===== OUTRAS FUNÇÕES =====
+        function showTooltip(event, title, location, info) {
+            const tooltip = event.currentTarget.nextElementSibling;
+            if (tooltip && tooltip.classList.contains('map-tooltip')) {
+                tooltip.style.opacity = '1';
+            }
+        }
+
+        function hideTooltip(event) {
+            const tooltip = event.currentTarget.nextElementSibling;
+            if (tooltip && tooltip.classList.contains('map-tooltip')) {
+                tooltip.style.opacity = '0';
+            }
+        }
+
+        function setMapView(view) {
+            const buttons = document.querySelectorAll('.map-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            showToast(`Visualização alterada para: ${view}`, 'info');
+        }
+
+        function exportar(tipo) {
+            showToast(`Exportando ${tipo}... O download iniciará em breve.`, 'success');
+        }
+
+        function agendarRelatorio() {
+            showToast('Agendamento configurado com sucesso! Você receberá os relatórios no e-mail cadastrado.', 'success');
+        }
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        async function onConfigChange(config) {
+            const systemName = config.system_name || defaultConfig.system_name;
+            const welcomeText = config.welcome_text || defaultConfig.welcome_text;
+            
+            const systemNameElement = document.getElementById('system-name');
+            const welcomeTextElement = document.getElementById('welcome-text');
+            
+            if (systemNameElement) {
+                systemNameElement.textContent = systemName;
+            }
+            if (welcomeTextElement) {
+                welcomeTextElement.textContent = welcomeText;
+            }
+        }
+
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig: defaultConfig,
+                onConfigChange: onConfigChange,
+                mapToCapabilities: (config) => ({
+                    recolorables: [],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["system_name", config.system_name || defaultConfig.system_name],
+                    ["welcome_text", config.welcome_text || defaultConfig.welcome_text]
+                ])
+            });
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a6d55b30008353d',t:'MTc2NDUzNzA2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
