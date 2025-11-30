@@ -1,2 +1,2 @@
-# pluz
+# plus
 sistema refinado
