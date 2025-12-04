@@ -1,2 +1,5 @@
-# plus
-sistema refinado
+project/
+│
+├── index.html
+├── style.css
+└── script.js
